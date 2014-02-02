@@ -159,7 +159,7 @@ endfunction"}}}
 function! s:mru.delete(candidates) "{{{
   for candidate in a:candidates
     call filter(self.candidates,
-          \ 'v:val.action__path !=# candidate.action__path')
+          \ 'v:val !=# candidate.action__path')
   endfor
 
   call self.save()
@@ -248,6 +248,8 @@ function! s:mru.load(...)  "{{{
 
   " Assume properly saved and sorted. unique sort is not necessary here
   call extend(self.candidates, items)
+
+  let self.candidates = s:L.uniq(self.candidates)
 
   if mru_file == self.mru_file.short
     let self.mtime = getftime(mru_file)
@@ -425,13 +427,10 @@ function! s:dir_mru_source.source__converter(candidates, context) "{{{
 endfunction"}}}
 
 let s:dir_mru_source.converters = [ s:dir_mru_source.source__converter ]
-
 "}}}
 
 " Misc "{{{
 function! s:on_post_filter(args, context) "{{{
-  let a:context.candidates = s:L.uniq_by(
-        \ a:context.candidates, 'v:val.action__path')
   for candidate in a:context.candidates
     let candidate.action__directory =
           \ unite#util#path2directory(candidate.action__path)
