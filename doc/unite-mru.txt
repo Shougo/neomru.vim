@@ -1,0 +1,208 @@
+*unite-mru.txt*	unite.vim for MRU sources.
+
+Version: 1.0
+Author : Shougo <Shougo.Matsu@gmail.com>
+License: MIT license  {{{
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:
+    The above copyright notice and this permission notice shall be included
+    in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+    OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+}}}
+
+CONTENTS					*unite-mru-contents*
+
+Usage			|unite-mru-usage|
+Install			|unite-mru-install|
+Configuration Examples	|unite-examples|
+Interface		|unite-interface|
+  Variables		  |unite-mru-variables|
+  Sources		  |unite-mru-sources|
+FAQ			|unite-mru-faq|
+
+==============================================================================
+USAGE						*unite-mru-usage*
+
+	To browse a list of mru files.
+>
+	:Unite file_mru
+<
+	To browse a list of mru directories.
+>
+	:Unite directory_mru
+>
+	nnoremap <silent> [unite]d
+	        \ :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+<
+==============================================================================
+INSTALL						*unite-mru-install*
+
+Requirements: unite.vim
+
+https://github.com/Shougo/unite.vim
+
+==============================================================================
+INTERFACE					*unite-mru-interface*
+
+------------------------------------------------------------------------------
+VARIABLES 					*unite-mru-variables*
+
+					*g:unite_source_file_mru_time_format*
+g:unite_source_file_mru_time_format
+		Specify the output format of the modified file
+		|unite-source-file_mru|. Uses |strftime()| formatting.
+		Note: It is not access time format.
+
+		The default value is "(%Y/%m/%d %H:%M:%S) ".
+
+				*g:unite_source_file_mru_filename_format*
+g:unite_source_file_mru_filename_format
+		Specify the output format of the filename of
+		|unite-source-file_mru|.  The format is same to
+		|fnamemodify()|.  If this variable is empty, drawing speed
+		is faster.
+
+		The default value is ":~:.".
+
+g:unite_source_file_mru_file			*g:unite_source_file_mru_file*
+		Specifies the file to write the information of most recent
+		used files.
+
+		The default value is |g:unite_data_directory|; '/file_mru'
+
+g:unite_source_mru_do_validate			*g:unite_source_mru_do_validate*
+		Specify whether automatically remove invalid file paths from
+		mru history.
+
+		Effective for both file_mru and directory_mru.
+
+		The default value is 1
+
+					*g:unite_source_mru_update_interval*
+g:unite_source_mru_update_interval
+		Specify the update interval to save updated mru
+		files/directories to disk.
+
+		Effective for both file_mru and directory_mru
+
+		The default value is 600 (10 minutes)
+
+g:unite_source_file_mru_limit			*g:unite_source_file_mru_limit*
+		The number of recent file candidates to show in default
+		file_mru window.
+
+		The default value is 100.
+
+					*g:unite_source_file_mru_long_limit*
+g:unite_source_file_mru_long_limit
+		The maximum number of most recent files to save.
+
+		Refer to |unite-source-file_mru| for details.
+
+		The default value is 1000.
+
+		Note: The mru code has been optimized, you can set a large
+		number like 5000 without impact the performance.
+
+				*g:unite_source_file_mru_ignore_pattern*
+g:unite_source_file_mru_ignore_pattern
+		Refer autoload/unite/sources/file_mru.vim about the default
+		value.
+
+		Note: This function is deprecated.  Please use
+		|unite#custom#source()| instead.
+
+		Note: This variable must be set before using |unite|.
+
+				*g:unite_source_directory_mru_time_format*
+g:unite_source_directory_mru_time_format
+				*g:unite_source_directory_mru_filename_format*
+g:unite_source_directory_mru_filename_format
+				*g:unite_source_directory_mru_file*
+g:unite_source_directory_mru_file
+
+		The default value is |g:unite_data_directory|; '/directory_mru'
+
+				*g:unite_source_directory_mru_limit*
+g:unite_source_directory_mru_limit
+
+		The default value is 100.
+
+				*g:unite_source_directory_mru_long_limit*
+g:unite_source_directory_mru_long_limit
+
+		Refer to |unite-source-file_mru| for details.
+
+		The default value is 1000.
+
+				*g:unite_source_directory_mru_ignore_pattern*
+g:unite_source_directory_mru_ignore_pattern
+
+		Same as |unite-source-file_mru| except that the
+		targets are |unite-source-directory_mru|.
+
+------------------------------------------------------------------------------
+SOURCES						*unite-mru-sources*
+
+						*unite-source-file_mru*
+file_mru	Nominates files you used recently as candidates, ordering
+		by time series.
+
+		For file_mru and directory_mru source, two lists are
+		maintained
+
+		1. short list for quick start; |g:unite_source_file_mru_limit|
+		2. long list for tracking mru history.
+		|g:unite_source_file_mru_long_limit|
+
+		Normally, only the short list are shown in the unite window.
+		To load the long list  Hit the key associated with
+		|<Plug>(unite_redraw)| to trigger the unite redraw event.
+
+		Or, you can start file_mru/directory_mru with argument
+		including `*`, `_`, or `all`, `long`
+
+		For example, `Unite file_mru:long`
+
+		The mru code is overhauled to tracking long mru history.
+		Set a large number like 5000 for the long limit will not
+		impact vim performance.
+
+						*unite-source-directory_mru*
+directory_mru	Nominates directories you used recently as candidates,
+		ordering by time series.
+
+		Refer to |unite-source-file_mru|
+
+==============================================================================
+FAQ						*unite-faq*
+
+Q: mru source is slow in large mru files.
+https://github.com/Shougo/unite.vim/issues/422
+
+A: You can set |g:unite_source_mru_do_validate| to 0. It is faster. But unite
+does not validate mru files.
+
+Q: I want to restrict the files I see to the current project or the current
+directory in mru sources.
+https://github.com/Shougo/unite.vim/issues/456
+
+A: You should use |unite-filter-matcher_project_files|. >
+  call unite#custom#source(
+        \ 'file_mru', 'matchers',
+        \ ['matcher_project_files', 'matcher_fuzzy'])
+<
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:
