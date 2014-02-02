@@ -287,8 +287,7 @@ let s:file_mru = extend(deepcopy(s:mru), {
       \)
 function! s:file_mru.validate()  "{{{
   if self.do_validate
-    call filter(self.candidates,
-          \ 'getftype(v:val.action__path) ==# "file"')
+    call filter(self.candidates, 'getftype(v:val) ==# "file"')
   endif
 endfunction"}}}
 
@@ -308,8 +307,7 @@ let s:directory_mru = extend(deepcopy(s:mru), {
 
 function! s:directory_mru.validate()  "{{{
   if self.do_validate
-    call filter(self.candidates,
-          \ 'getftype(v:val.action__path) ==# "dir"')
+    call filter(self.candidates, 'getftype(v:val) ==# "dir"')
   endif
 endfunction"}}}
 "}}}
