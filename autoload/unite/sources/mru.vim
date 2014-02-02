@@ -42,10 +42,9 @@ call unite#util#set_default(
       \ 'g:unite_source_mru_update_interval', 600)
 
 call unite#util#set_default(
-      \ 'g:unite_source_file_mru_time_format',
-      \ '(%Y/%m/%d %H:%M:%S) ')
+      \ 'g:unite_source_file_mru_time_format', '')
 call unite#util#set_default(
-      \ 'g:unite_source_file_mru_filename_format', ':~:.')
+      \ 'g:unite_source_file_mru_filename_format', '')
 call unite#util#set_default(
       \ 'g:unite_source_file_mru_file',
       \ g:unite_data_directory . '/mru/file')
@@ -66,10 +65,8 @@ call unite#util#set_default(
       \'\|\%(^\%(fugitive\)://\)'
       \)
 
-call unite#util#set_default('g:unite_source_directory_mru_time_format',
-      \ '(%Y/%m/%d %H:%M:%S) ')
-call unite#util#set_default('g:unite_source_directory_mru_filename_format',
-      \ ':~:.')
+call unite#util#set_default('g:unite_source_directory_mru_time_format', '')
+call unite#util#set_default('g:unite_source_directory_mru_filename_format', '')
 call unite#util#set_default('g:unite_source_directory_mru_file',
       \ g:unite_data_directory . '/mru/directory')
 call unite#util#set_default('g:unite_source_directory_mru_long_file',
@@ -374,6 +371,11 @@ function! s:file_mru_source.hooks.on_post_filter(args, context) "{{{
   return s:on_post_filter(a:args, a:context)
 endfunction"}}}
 function! s:dir_mru_source.hooks.on_post_filter(args, context) "{{{
+  for candidate in a:context.candidates
+    if candidate.abbr !~ '/$'
+      let candidate.abbr .= '/'
+    endif
+  endfor
   return s:on_post_filter(a:args, a:context)
 endfunction"}}}
 function! s:file_mru_source.gather_candidates(args, context) "{{{
@@ -433,15 +435,13 @@ function! s:on_post_filter(args, context) "{{{
   for candidate in a:context.candidates
     let candidate.action__directory =
           \ unite#util#path2directory(candidate.action__path)
-    let candidate.kind =
-          \ (isdirectory(candidate.action__path) ? 'directory' : 'file')
-
-    if candidate.kind ==# 'directory' && candidate.abbr !~ '/$'
-      let candidate.abbr .= '/'
-    endif
   endfor
 endfunction"}}}
 function! s:converter(candidates, filename_format, time_format) "{{{
+  if a:filename_format == '' && a:time_format == ''
+    return a:candidates
+  endif
+
   for candidate in filter(copy(a:candidates),
         \ "!has_key(v:val, 'abbr')")
     let path = (a:filename_format == '') ?  candidate.action__path :

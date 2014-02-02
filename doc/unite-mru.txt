@@ -65,7 +65,7 @@ g:unite_source_file_mru_time_format
 		|unite-source-file_mru|. Uses |strftime()| formatting.
 		Note: It is not access time format.
 
-		The default value is "(%Y/%m/%d %H:%M:%S) ".
+		The default value is "".
 
 				*g:unite_source_file_mru_filename_format*
 g:unite_source_file_mru_filename_format
@@ -74,7 +74,7 @@ g:unite_source_file_mru_filename_format
 		|fnamemodify()|.  If this variable is empty, drawing speed
 		is faster.
 
-		The default value is ":~:.".
+		The default value is "".
 
 g:unite_source_file_mru_file			*g:unite_source_file_mru_file*
 		Specifies the file to write the information of most recent
