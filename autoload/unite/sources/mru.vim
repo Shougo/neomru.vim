@@ -30,8 +30,8 @@ set cpo&vim
 
 
 " Variables  "{{{
-let s:V = unite#util#get_vital()
-let s:L = s:V.import("Data.List")
+let s:L = unite#util#get_vital().import("Data.List")
+let s:Prelude = unite#util#get_vital().import('Prelude')
 
 " The version of MRU file format.
 let s:VERSION = '0.3.0'
@@ -171,7 +171,7 @@ endfunction"}}}
 
 function! s:mru.save(...) "{{{
   let opts = {}
-  if a:0 >= 1 && s:V.is_dict(a:1)
+  if a:0 >= 1 && s:Prelude.is_dict(a:1)
     call extend(opts, a:1)
   endif
 
@@ -317,7 +317,7 @@ let s:MRUs.file = s:file_mru
 let s:MRUs.directory = s:directory_mru
 function! unite#sources#mru#_save(...) "{{{
   let opts = {}
-  if a:0 >= 1 && s:V.is_dict(a:1)
+  if a:0 >= 1 && s:Prelude.is_dict(a:1)
     call extend(opts, a:1)
   endif
 
