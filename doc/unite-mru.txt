@@ -187,7 +187,7 @@ directory_mru	Nominates directories you used recently as candidates,
 		Refer to |unite-source-file_mru|
 
 ==============================================================================
-FAQ						*unite-faq*
+FAQ						*unite-mru-faq*
 
 Q: mru source is slow in large mru files.
 https://github.com/Shougo/unite.vim/issues/422
