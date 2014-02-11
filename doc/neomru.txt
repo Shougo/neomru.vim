@@ -1,4 +1,4 @@
-*unite-mru.txt*	unite.vim for MRU sources.
+*neomru.txt*	MRU plugin includes unite.vim MRU sources.
 
 Version: 1.0
 Author : Shougo <Shougo.Matsu@gmail.com>
@@ -22,18 +22,18 @@ License: MIT license  {{{
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 }}}
 
-CONTENTS					*unite-mru-contents*
+CONTENTS					*neomru-contents*
 
-Usage			|unite-mru-usage|
-Install			|unite-mru-install|
-Configuration Examples	|unite-examples|
-Interface		|unite-interface|
-  Variables		  |unite-mru-variables|
-  Sources		  |unite-mru-sources|
-FAQ			|unite-mru-faq|
+Usage			|neomru-usage|
+Install			|neomru-install|
+Configuration Examples	|neomru-examples|
+Interface		|neomru-interface|
+  Variables		  |neomru-variables|
+  Sources		  |neomru-sources|
+FAQ			|neomru-faq|
 
 ==============================================================================
-USAGE						*unite-mru-usage*
+USAGE						*neomru-usage*
 
 	To browse a list of mru files.
 >
@@ -47,17 +47,17 @@ USAGE						*unite-mru-usage*
 	        \ :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
 <
 ==============================================================================
-INSTALL						*unite-mru-install*
+INSTALL						*neomru-install*
 
 Requirements: unite.vim
 
 https://github.com/Shougo/unite.vim
 
 ==============================================================================
-INTERFACE					*unite-mru-interface*
+INTERFACE					*neomru-interface*
 
 ------------------------------------------------------------------------------
-VARIABLES 					*unite-mru-variables*
+VARIABLES 					*neomru-variables*
 
 					*g:unite_source_file_mru_time_format*
 g:unite_source_file_mru_time_format
@@ -154,7 +154,7 @@ g:unite_source_directory_mru_ignore_pattern
 		targets are |unite-source-directory_mru|.
 
 ------------------------------------------------------------------------------
-SOURCES						*unite-mru-sources*
+SOURCES						*neomru-sources*
 
 						*unite-source-file_mru*
 file_mru	Nominates files you used recently as candidates, ordering
@@ -187,7 +187,7 @@ directory_mru	Nominates directories you used recently as candidates,
 		Refer to |unite-source-file_mru|
 
 ==============================================================================
-FAQ						*unite-mru-faq*
+FAQ						*neomru-faq*
 
 Q: mru source is slow in large mru files.
 https://github.com/Shougo/unite.vim/issues/422

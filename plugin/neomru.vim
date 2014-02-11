@@ -1,7 +1,7 @@
 "=============================================================================
-" FILE: mru.vim
+" FILE: neomru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 05 Oct 2010
+" Last Modified: 12 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -24,7 +24,7 @@
 " }}}
 "=============================================================================
 
-if exists('g:loaded_unite_source_mru')
+if exists('g:loaded_neomru')
       \ || ($SUDO_USER != '' && $USER !=# $SUDO_USER
       \     && $HOME !=# expand('~'.$USER)
       \     && $HOME ==# expand('~'.$SUDO_USER))
@@ -34,7 +34,7 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-augroup plugin-unite-source-mru
+augroup neomru
   autocmd!
   autocmd BufEnter,VimEnter,BufNew,BufWinEnter *
         \ call s:append(expand('<amatch>'))
@@ -42,7 +42,7 @@ augroup plugin-unite-source-mru
         \ call unite#sources#mru#_save({'event' : 'VimLeavePre'})
 augroup END
 
-let g:loaded_unite_source_mru = 1
+let g:loaded_neomru = 1
 
 function! s:append(path) "{{{
   if bufnr('%') != expand('<abuf>')
