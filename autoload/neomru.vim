@@ -109,11 +109,10 @@ call neomru#set_default(
 let s:MRUs = {}
 
 " Template MRU:  "{{{2
-
 "---------------------%>---------------------
 " @candidates:
 " ------------
-" [[full_path, localtime()], ... ]
+" [full_path, ... ]
 "
 " @mtime
 " ------
@@ -132,10 +131,10 @@ let s:mru = {
       \ 'candidates'      : [],
       \ 'type'            : '',
       \ 'mtime'           : 0,
-      \ 'update_interval' : g:unite_source_mru_update_interval,
+      \ 'update_interval' : g:neomru#update_interval,
       \ 'mru_file'        : {},
       \ 'limit'           : {},
-      \ 'do_validate'     : g:unite_source_mru_do_validate,
+      \ 'do_validate'     : g:neomru#do_validate,
       \ 'is_loaded'       : 0,
       \ 'version'         : s:VERSION,
       \ }
@@ -162,7 +161,7 @@ function! s:mru.gather_candidates(args, context) "{{{
         \ + self.candidates
   call unite#sources#mru#variables#clear(self.type)
 
-  if a:context.is_redraw && g:unite_source_mru_do_validate
+  if a:context.is_redraw && g:neomru#do_validate
     call filter(self.candidates,
           \ ((self.type == 'file') ?
           \ "v:val !~ '^\\a\\w\\+:'
@@ -302,12 +301,12 @@ endfunction"}}}
 let s:file_mru = extend(deepcopy(s:mru), {
       \ 'type'          : 'file',
       \ 'mru_file'      : {
-      \   'short' : g:unite_source_file_mru_file,
-      \   'long'  : g:unite_source_file_mru_long_file,
+      \   'short' : g:neomru#file_mru_path,
+      \   'long'  : g:neomru#file_mru_long_path,
       \  },
       \ 'limit'         : {
-      \   'short' : g:unite_source_file_mru_limit,
-      \   'long'  : g:unite_source_file_mru_long_limit,
+      \   'short' : g:neomru#file_mru_limit,
+      \   'long'  : g:neomru#file_mru_long_limit,
       \  },
       \ }
       \)
@@ -321,12 +320,12 @@ endfunction"}}}
 let s:directory_mru = extend(deepcopy(s:mru), {
       \ 'type'          : 'directory',
       \ 'mru_file'      : {
-      \   'short' : g:unite_source_directory_mru_file,
-      \   'long'  : g:unite_source_directory_mru_long_file,
+      \   'short' : g:neomru#directory_mru_path,
+      \   'long'  : g:neomru#directory_mru_long_path,
       \  },
       \ 'limit'         : {
-      \   'short' : g:unite_source_directory_mru_limit,
-      \   'long'  : g:unite_source_directory_mru_long_limit,
+      \   'short' : g:neomru#directory_mru_limit,
+      \   'long'  : g:neomru#directory_mru_long_limit,
       \  },
       \ }
       \)
@@ -342,7 +341,12 @@ endfunction"}}}
 
 let s:MRUs.file = s:file_mru
 let s:MRUs.directory = s:directory_mru
-function! unite#sources#mru#_save(...) "{{{
+function! neomru#init()  "{{{
+endfunction"}}}
+function! neomru#_get_mrus()  "{{{
+  return s:MRUs
+endfunction"}}}
+function! neomru#_save(...) "{{{
   let opts = {}
   if a:0 >= 1 && type(a:1) == type({})
     call extend(opts, a:1)
@@ -355,136 +359,7 @@ endfunction"}}}
 "}}}
 "}}}
 
-" Source  "{{{
-
-function! unite#sources#mru#define() "{{{
-  return [s:file_mru_source, s:dir_mru_source]
-endfunction"}}}
-let s:file_mru_source = {
-      \ 'name' : 'file_mru',
-      \ 'description' : 'candidates from file MRU list',
-      \ 'hooks' : {},
-      \ 'action_table' : {},
-      \ 'syntax' : 'uniteSource__FileMru',
-      \ 'default_kind' : 'file',
-      \ 'ignore_pattern' : g:unite_source_file_mru_ignore_pattern,
-      \ 'max_candidates' : 200,
-      \}
-
-let s:dir_mru_source = {
-      \ 'name' : 'directory_mru',
-      \ 'description' : 'candidates from directory MRU list',
-      \ 'hooks' : {},
-      \ 'action_table' : {},
-      \ 'syntax' : 'uniteSource__DirectoryMru',
-      \ 'default_kind' : 'directory',
-      \ 'ignore_pattern' :
-      \    g:unite_source_directory_mru_ignore_pattern,
-      \ 'alias_table' : { 'unite__new_candidate' : 'vimfiler__mkdir' },
-      \ 'max_candidates' : 200,
-      \}
-
-function! s:file_mru_source.hooks.on_syntax(args, context) "{{{
-  syntax match uniteSource__FileMru_Time
-        \ /([^)]*)\s\+/
-        \ contained containedin=uniteSource__FileMru
-  highlight default link uniteSource__FileMru_Time Statement
-endfunction"}}}
-function! s:dir_mru_source.hooks.on_syntax(args, context) "{{{
-  syntax match uniteSource__DirectoryMru_Time
-        \ /([^)]*)\s\+/
-        \ contained containedin=uniteSource__DirectoryMru
-  highlight default link uniteSource__DirectoryMru_Time Statement
-endfunction"}}}
-function! s:file_mru_source.hooks.on_post_filter(args, context) "{{{
-  return s:on_post_filter(a:args, a:context)
-endfunction"}}}
-function! s:dir_mru_source.hooks.on_post_filter(args, context) "{{{
-  for candidate in a:context.candidates
-    if candidate.abbr !~ '/$'
-      let candidate.abbr .= '/'
-    endif
-  endfor
-  return s:on_post_filter(a:args, a:context)
-endfunction"}}}
-function! s:file_mru_source.gather_candidates(args, context) "{{{
-  let mru = s:MRUs.file
-  return mru.gather_candidates(a:args, a:context)
-endfunction"}}}
-function! s:dir_mru_source.gather_candidates(args, context) "{{{
-  let mru = s:MRUs.directory
-  return mru.gather_candidates(a:args, a:context)
-endfunction"}}}
-"}}}
-" Actions "{{{
-let s:file_mru_source.action_table.delete = {
-      \ 'description' : 'delete from file_mru list',
-      \ 'is_invalidate_cache' : 1,
-      \ 'is_quit' : 0,
-      \ 'is_selectable' : 1,
-      \ }
-function! s:file_mru_source.action_table.delete.func(candidates) "{{{
-  call s:MRUs.file.delete(a:candidates)
-endfunction"}}}
-
-let s:dir_mru_source.action_table.delete = {
-      \ 'description' : 'delete from directory_mru list',
-      \ 'is_invalidate_cache' : 1,
-      \ 'is_quit' : 0,
-      \ 'is_selectable' : 1,
-      \ }
-function! s:dir_mru_source.action_table.delete.func(candidates) "{{{
-  call s:MRUs.directory.delete(a:candidates)
-endfunction"}}}
-"}}}
-
-" Filters "{{{
-function! s:file_mru_source.source__converter(candidates, context) "{{{
-  return s:converter(a:candidates,
-        \ g:unite_source_file_mru_filename_format,
-        \ g:unite_source_file_mru_time_format)
-endfunction"}}}
-
-let s:file_mru_source.converters = [ s:file_mru_source.source__converter ]
-
-function! s:dir_mru_source.source__converter(candidates, context) "{{{
-  return s:converter(a:candidates,
-        \ g:unite_source_directory_mru_filename_format,
-        \ g:unite_source_directory_mru_time_format)
-endfunction"}}}
-
-let s:dir_mru_source.converters = [ s:dir_mru_source.source__converter ]
-"}}}
-
 " Misc "{{{
-function! s:on_post_filter(args, context) "{{{
-  for candidate in a:context.candidates
-    let candidate.action__directory =
-          \ unite#util#path2directory(candidate.action__path)
-  endfor
-endfunction"}}}
-function! s:converter(candidates, filename_format, time_format) "{{{
-  if a:filename_format == '' && a:time_format == ''
-    return a:candidates
-  endif
-
-  for candidate in filter(copy(a:candidates),
-        \ "!has_key(v:val, 'abbr')")
-    let path = (a:filename_format == '') ?  candidate.action__path :
-          \ unite#util#substitute_path_separator(
-          \   fnamemodify(candidate.action__path, a:filename_format))
-    if path == ''
-      let path = candidate.action__path
-    endif
-
-    " Set default abbr.
-    let candidate.abbr = (a:time_format == '') ? '' :
-          \ strftime(a:time_format, getftime(candidate.action__path))
-    let candidate.abbr .= path
-  endfor
-
-  return a:candidates
-endfunction"}}}
 function! s:writefile(path, list) "{{{
   if !isdirectory(fnamemodify(a:path, ':p:h'))
     call mkdir(fnamemodify(a:path, ':p:h'), 'p')
