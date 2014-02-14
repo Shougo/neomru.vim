@@ -37,14 +37,16 @@ USAGE						*neomru-usage*
 
 	To browse a list of mru files.
 >
+	:Unite neomru/file
 	:Unite file_mru
 <
 	To browse a list of mru directories.
 >
+	:Unite neomru/directory
 	:Unite directory_mru
 >
 	nnoremap <silent> [unite]d
-	        \ :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+	        \ :<C-u>Unite -buffer-name=files -default-action=lcd neomru/directory<CR>
 <
 ==============================================================================
 INSTALL						*neomru-install*
@@ -59,119 +61,129 @@ INTERFACE					*neomru-interface*
 ------------------------------------------------------------------------------
 VARIABLES 					*neomru-variables*
 
-					*g:unite_source_file_mru_time_format*
-g:unite_source_file_mru_time_format
+						*g:neomru#time_format*
+g:neomru#time_format
 		Specify the output format of the modified file
-		|unite-source-file_mru|. Uses |strftime()| formatting.
+		in MRU sources. Uses |strftime()| formatting.
 		Note: It is not access time format.
+					*g:unite_source_file_mru_time_format*
+		Note: It is deprecated name.
 
 		The default value is "".
 
+						*g:neomru#filename_format*
+g:neomru#filename_format
+		Specify the output format of the filename of in MRU sources.
+		The format is same to |fnamemodify()|.  If this variable is
+		empty, drawing speed is faster.
 				*g:unite_source_file_mru_filename_format*
-g:unite_source_file_mru_filename_format
-		Specify the output format of the filename of
-		|unite-source-file_mru|.  The format is same to
-		|fnamemodify()|.  If this variable is empty, drawing speed
-		is faster.
+		Note: It is deprecated name.
 
 		The default value is "".
 
-g:unite_source_file_mru_file			*g:unite_source_file_mru_file*
-		Specifies the file to write the information of most recent
-		used files.
-
-		The default value is '~/.cache/neomru/file'
-
-g:unite_source_mru_do_validate			*g:unite_source_mru_do_validate*
+g:neomru#do_validate				*g:neomru#do_validate*
 		Specify whether automatically remove invalid file paths from
 		mru history.
-
-		Effective for both file_mru and directory_mru.
+						*g:unite_source_mru_do_validate*
+		Note: It is deprecated name.
 
 		The default value is 1
 
-					*g:unite_source_mru_update_interval*
-g:unite_source_mru_update_interval
+						*g:neomru#update_interval*
+g:neomru#update_interval
 		Specify the update interval to save updated mru
 		files/directories to disk.
-
-		Effective for both file_mru and directory_mru
+					*g:unite_source_mru_update_interval*
+		Note: It is deprecated name.
 
 		The default value is 600 (10 minutes)
 
-g:unite_source_file_mru_limit			*g:unite_source_file_mru_limit*
+g:neomru#file_mru_path				*g:neomru#file_mru_path*
+		Specifies the file to write the information of most recent
+		used files.
+						*g:unite_source_file_mru_file*
+		Note: It is deprecated name.
+
+		The default value is '~/.cache/neomru/file'
+
+g:neomru#file_mru_limit				*g:neomru#file_mru_limit*
 		The number of recent file candidates to show in default
 		file_mru window.
+						*g:unite_source_file_mru_limit*
+		Note: It is deprecated name.
 
 		The default value is 100.
 
-					*g:unite_source_file_mru_long_limit*
-g:unite_source_file_mru_long_limit
+						*g:neomru#file_mru_long_limit*
+g:neomru#file_mru_long_limit
 		The maximum number of most recent files to save.
-
-		Refer to |unite-source-file_mru| for details.
+		Refer to |unite-source-neomru/file| for details.
+					*g:unite_source_file_mru_long_limit*
+		Note: It is deprecated name.
 
 		The default value is 1000.
 
 		Note: The mru code has been optimized, you can set a large
 		number like 5000 without impact the performance.
 
-				*g:unite_source_file_mru_ignore_pattern*
-g:unite_source_file_mru_ignore_pattern
-		Refer autoload/unite/sources/file_mru.vim about the default
+					*g:neomru#file_mru_ignore_pattern*
+g:neomru#file_mru_ignore_pattern
+		Refer autoload/neomru.vim about the default
 		value.
-
-		Note: This function is deprecated.  Please use
+		Note: This variable is deprecated.  Please use
 		|unite#custom#source()| instead.
-
 		Note: This variable must be set before using |unite|.
+				*g:unite_source_file_mru_ignore_pattern*
+		Note: It is deprecated name.
 
-				*g:unite_source_directory_mru_time_format*
-g:unite_source_directory_mru_time_format
-				*g:unite_source_directory_mru_filename_format*
-g:unite_source_directory_mru_filename_format
-				*g:unite_source_directory_mru_file*
-g:unite_source_directory_mru_file
+						*g:neomru#directory_mru_path*
+g:neomru#directory_mru_path
+
+					*g:unite_source_directory_mru_file*
+		Note: It is deprecated name.
 
 		The default value is '~/.cache/neomru/directory'
 
-				*g:unite_source_directory_mru_limit*
-g:unite_source_directory_mru_limit
+						*g:neomru#directory_mru_limit*
+g:neomru#directory_mru_limit
+					*g:unite_source_directory_mru_limit*
+		Note: It is deprecated name.
 
 		The default value is 100.
 
+					*g:neomru#directory_mru_long_limit*
+g:neomru#directory_mru_long_limit
 				*g:unite_source_directory_mru_long_limit*
-g:unite_source_directory_mru_long_limit
-
-		Refer to |unite-source-file_mru| for details.
+		Note: It is deprecated name.
 
 		The default value is 1000.
 
+					*g:neomru#directory_mru_ignore_pattern*
+g:neomru#directory_mru_ignore_pattern
 				*g:unite_source_directory_mru_ignore_pattern*
-g:unite_source_directory_mru_ignore_pattern
+		Note: It is deprecated name.
 
-		Same as |unite-source-file_mru| except that the
-		targets are |unite-source-directory_mru|.
+		The targets are directory mru.
 
 ------------------------------------------------------------------------------
 SOURCES						*neomru-sources*
 
+						*unite-source-neomru/file*
+neomru/file
 						*unite-source-file_mru*
-file_mru	Nominates files you used recently as candidates, ordering
+file_mru
+		Nominates files you used recently as candidates, ordering
 		by time series.
 
-		For file_mru and directory_mru source, two lists are
-		maintained
-
-		1. short list for quick start; |g:unite_source_file_mru_limit|
+		1. short list for quick start; |g:neomru#file_mru_limit|
 		2. long list for tracking mru history.
-		|g:unite_source_file_mru_long_limit|
+		|g:neomru#file_mru_long_limit|
 
 		Normally, only the short list are shown in the unite window.
 		To load the long list  Hit the key associated with
 		|<Plug>(unite_redraw)| to trigger the unite redraw event.
 
-		Or, you can start file_mru/directory_mru with argument
+		Or, you can start the sources with argument
 		including `*`, `_`, or `all`, `long`
 
 		For example, `Unite file_mru:long`
@@ -180,19 +192,20 @@ file_mru	Nominates files you used recently as candidates, ordering
 		Set a large number like 5000 for the long limit will not
 		impact vim performance.
 
+						*unite-source-neomru/directory*
+neomru/directory
 						*unite-source-directory_mru*
-directory_mru	Nominates directories you used recently as candidates,
+directory_mru
+		Nominates directories you used recently as candidates,
 		ordering by time series.
-
-		Refer to |unite-source-file_mru|
 
 ==============================================================================
 FAQ						*neomru-faq*
 
-Q: mru source is slow in large mru files.
+Q: mru sources are slow in large mru files.
 https://github.com/Shougo/unite.vim/issues/422
 
-A: You can set |g:unite_source_mru_do_validate| to 0. It is faster. But unite
+A: You can set |g:neomru#do_validate| to 0. It is faster. But unite
 does not validate mru files.
 
 Q: I want to restrict the files I see to the current project or the current
