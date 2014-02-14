@@ -47,10 +47,10 @@ call unite#util#set_default(
       \ 'g:unite_source_file_mru_filename_format', '')
 call unite#util#set_default(
       \ 'g:unite_source_file_mru_file',
-      \ g:unite_data_directory . '/mru/file')
+      \ expand('~/.cache/neomru/file'))
 call unite#util#set_default(
       \ 'g:unite_source_file_mru_long_file',
-      \ g:unite_data_directory . '/mru/file_long')
+      \ expand('~/.cache/neomru/file_long'))
 call unite#util#set_default(
       \ 'g:unite_source_file_mru_limit',
       \ 100)
@@ -68,9 +68,9 @@ call unite#util#set_default(
 call unite#util#set_default('g:unite_source_directory_mru_time_format', '')
 call unite#util#set_default('g:unite_source_directory_mru_filename_format', '')
 call unite#util#set_default('g:unite_source_directory_mru_file',
-      \ g:unite_data_directory . '/mru/directory')
+      \ expand('~/.cache/neomru/directory'))
 call unite#util#set_default('g:unite_source_directory_mru_long_file',
-      \ g:unite_data_directory . '/mru/directory_long')
+      \ expand('~/.cache/neomru/directory_long'))
 call unite#util#set_default('g:unite_source_directory_mru_limit', 100)
 call unite#util#set_default('g:unite_source_directory_mru_long_limit', 1000)
 call unite#util#set_default('g:unite_source_directory_mru_ignore_pattern',
