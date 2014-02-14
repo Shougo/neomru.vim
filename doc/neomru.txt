@@ -112,19 +112,7 @@ g:neomru#file_mru_limit				*g:neomru#file_mru_limit*
 						*g:unite_source_file_mru_limit*
 		Note: It is deprecated name.
 
-		The default value is 100.
-
-						*g:neomru#file_mru_long_limit*
-g:neomru#file_mru_long_limit
-		The maximum number of most recent files to save.
-		Refer to |unite-source-neomru/file| for details.
-					*g:unite_source_file_mru_long_limit*
-		Note: It is deprecated name.
-
 		The default value is 1000.
-
-		Note: The mru code has been optimized, you can set a large
-		number like 5000 without impact the performance.
 
 					*g:neomru#file_mru_ignore_pattern*
 g:neomru#file_mru_ignore_pattern
@@ -149,13 +137,6 @@ g:neomru#directory_mru_limit
 					*g:unite_source_directory_mru_limit*
 		Note: It is deprecated name.
 
-		The default value is 100.
-
-					*g:neomru#directory_mru_long_limit*
-g:neomru#directory_mru_long_limit
-				*g:unite_source_directory_mru_long_limit*
-		Note: It is deprecated name.
-
 		The default value is 1000.
 
 					*g:neomru#directory_mru_ignore_pattern*
@@ -174,19 +155,6 @@ neomru/file
 file_mru
 		Nominates files you used recently as candidates, ordering
 		by time series.
-
-		1. short list for quick start; |g:neomru#file_mru_limit|
-		2. long list for tracking mru history.
-		|g:neomru#file_mru_long_limit|
-
-		Normally, only the short list are shown in the unite window.
-		To load the long list  Hit the key associated with
-		|<Plug>(unite_redraw)| to trigger the unite redraw event.
-
-		Or, you can start the sources with argument
-		including `*`, `_`, or `all`, `long`
-
-		For example, `Unite file_mru:long`
 
 		The mru code is overhauled to tracking long mru history.
 		Set a large number like 5000 for the long limit will not

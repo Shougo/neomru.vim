@@ -64,16 +64,8 @@ call neomru#set_default(
       \  expand('~/.cache/neomru/file')),
       \ 'g:unite_source_file_mru_file',)
 call neomru#set_default(
-      \ 'g:neomru#file_mru_long_path',
-      \ s:substitute_path_separator(
-      \  expand('~/.cache/neomru/file_long')),
-      \ 'g:unite_source_file_mru_long_file')
-call neomru#set_default(
       \ 'g:neomru#file_mru_limit',
-      \ 100, 'g:unite_source_file_mru_limit')
-call neomru#set_default(
-      \ 'g:neomru#file_mru_long_limit',
-      \ 1000, 'g:unite_source_file_mru_long_limit')
+      \ 1000, 'g:unite_source_file_mru_limit')
 call neomru#set_default(
       \ 'g:neomru#file_mru_ignore_pattern',
       \'\~$\|\.\%(o\|exe\|dll\|bak\|zwc\|pyc\|sw[po]\)$'
@@ -88,16 +80,8 @@ call neomru#set_default(
       \  expand('~/.cache/neomru/directory')),
       \ 'g:unite_source_directory_mru_file')
 call neomru#set_default(
-      \ 'g:neomru#directory_mru_long_path',
-      \ s:substitute_path_separator(
-      \  expand('~/.cache/neomru/directory_long')),
-      \ 'g:unite_source_directory_mru_long_file')
-call neomru#set_default(
       \ 'g:neomru#directory_mru_limit',
-      \ 100, 'g:unite_source_directory_mru_limit')
-call neomru#set_default(
-      \ 'g:neomru#directory_mru_long_limit',
-      \ 1000, 'g:unite_source_directory_mru_long_limit')
+      \ 1000, 'g:unite_source_directory_mru_limit')
 call neomru#set_default(
       \ 'g:neomru#directory_mru_ignore_pattern',
       \'\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
@@ -117,14 +101,13 @@ let s:MRUs = {}
 " @mtime
 " ------
 " the last modified time of the mru file.
-" - set once when loading the short mru_file
+" - set once when loading the mru_file
 " - update when #save()
 "
 " @is_loaded
 " ----------
 " 0: empty
-" 1: short
-" 2: long
+" 1: loaded
 " -------------------%<---------------------
 
 let s:mru = {
@@ -169,15 +152,7 @@ function! s:mru.gather_candidates(args, context) "{{{
           \ "isdirectory(v:val)"))
   endif
 
-  if get(a:args, 0, '') =~# '\%(long\|all\|\*\|_\)'
-      \ || a:context.is_redraw
-    call self.load()
-    let candidates = self.candidates
-  else
-    let candidates = self.candidates[: self.limit.short]
-  endif
-
-  return map(copy(candidates), "{
+  return map(copy(self.candidates), "{
         \ 'word' : v:val,
         \ 'action__path' : v:val,
         \}")
@@ -191,8 +166,7 @@ function! s:mru.delete(candidates) "{{{
   call self.save()
 endfunction"}}}
 function! s:mru.has_external_update() "{{{
-  return self.mtime < getftime(self.mru_file.short)
-      \ || self.mtime < getftime(self.mru_file.long)
+  return self.mtime < getftime(self.mru_file)
 endfunction"}}}
 
 function! s:mru.save(...) "{{{
@@ -209,16 +183,15 @@ function! s:mru.save(...) "{{{
   let self.candidates = []
 
   " should load all candidates
-  call self.load(1) " load short candidates
-  call self.load(1) " load long candidates
+  call self.load(1) " load candidates
 
   let self.candidates = unite#sources#mru#variables#get_mrus(self.type)
         \ + self.candidates
   call unite#sources#mru#variables#clear(self.type)
 
-  if self.has_external_update() && filereadable(self.mru_file.short)
-    " only need to get the short list which contains the latest MRUs
-    let [ver; items] = readfile(self.mru_file.short)
+  if self.has_external_update() && filereadable(self.mru_file)
+    " only need to get the list which contains the latest MRUs
+    let [ver; items] = readfile(self.mru_file)
     if self.version_check(ver)
       call extend(self.candidates, items)
     endif
@@ -230,18 +203,11 @@ function! s:mru.save(...) "{{{
     call self.validate()
   endif
 
-  call s:writefile(self.mru_file.short,
+  call s:writefile(self.mru_file,
         \ [self.version] +
-        \ self.candidates[: self.limit.short - 1])
+        \ self.candidates[: self.limit - 1])
 
-  if len(self.candidates) > self.limit.short
-    call s:writefile(self.mru_file.long,
-          \ [self.version] +
-          \ self.candidates[self.limit.short : self.limit.long - 1])
-    let self.mtime = getftime(self.mru_file.long)
-  else
-    let self.mtime = getftime(self.mru_file.short)
-  endif
+  let self.mtime = getftime(self.mru_file)
 endfunction"}}}
 
 function! s:mru.load(...)  "{{{
@@ -252,11 +218,7 @@ function! s:mru.load(...)  "{{{
     return
   endif
 
-  " Load Order:
-  " 1. (load)  short mru list
-  " 2. (merge) long list on_redraw
-  let mru_file = empty(self.candidates) ?
-        \ self.mru_file.short : self.mru_file.long
+  let mru_file = self.mru_file
 
   if !filereadable(mru_file)
     return
@@ -277,12 +239,8 @@ function! s:mru.load(...)  "{{{
 
   let self.candidates = s:uniq(self.candidates)
 
-  if mru_file == self.mru_file.short
-    let self.mtime = getftime(mru_file)
-    let self.is_loaded = 1
-  elseif mru_file == self.mru_file.long
-    let self.is_loaded = 2
-  endif
+  let self.mtime = getftime(mru_file)
+  let self.is_loaded = 1
 endfunction"}}}
 function! s:mru.version_check(ver)  "{{{
   if str2float(a:ver) < self.version
@@ -300,14 +258,8 @@ endfunction"}}}
 "
 let s:file_mru = extend(deepcopy(s:mru), {
       \ 'type'          : 'file',
-      \ 'mru_file'      : {
-      \   'short' : g:neomru#file_mru_path,
-      \   'long'  : g:neomru#file_mru_long_path,
-      \  },
-      \ 'limit'         : {
-      \   'short' : g:neomru#file_mru_limit,
-      \   'long'  : g:neomru#file_mru_long_limit,
-      \  },
+      \ 'mru_file'      : g:neomru#file_mru_path,
+      \ 'limit'         : g:neomru#file_mru_limit,
       \ }
       \)
 function! s:file_mru.validate()  "{{{
@@ -319,14 +271,8 @@ endfunction"}}}
 " Directory MRU:   "{{{2
 let s:directory_mru = extend(deepcopy(s:mru), {
       \ 'type'          : 'directory',
-      \ 'mru_file'      : {
-      \   'short' : g:neomru#directory_mru_path,
-      \   'long'  : g:neomru#directory_mru_long_path,
-      \  },
-      \ 'limit'         : {
-      \   'short' : g:neomru#directory_mru_limit,
-      \   'long'  : g:neomru#directory_mru_long_limit,
-      \  },
+      \ 'mru_file'      : g:neomru#directory_mru_path,
+      \ 'limit'         : g:neomru#directory_mru_limit,
       \ }
       \)
 
