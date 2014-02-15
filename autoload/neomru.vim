@@ -115,7 +115,7 @@ let s:mru = {
       \ 'type'            : '',
       \ 'mtime'           : 0,
       \ 'update_interval' : g:neomru#update_interval,
-      \ 'mru_file'        : {},
+      \ 'mru_file'        : '',
       \ 'limit'           : {},
       \ 'do_validate'     : g:neomru#do_validate,
       \ 'is_loaded'       : 0,
