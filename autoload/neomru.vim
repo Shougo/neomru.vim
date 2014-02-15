@@ -280,6 +280,26 @@ let s:MRUs.file = s:file_mru
 let s:MRUs.directory = s:directory_mru
 function! neomru#init()  "{{{
 endfunction"}}}
+function! neomru#_import_file(path) "{{{
+  let path = a:path
+  if path == ''
+    let path = s:substitute_path_separator(
+      \  expand('~/.unite/file_mru'))
+  endif
+
+  let s:file_mru.candidates = s:uniq(
+        \ s:file_mru.candidates + import(path))
+endfunction"}}}
+function! neomru#_import_directory(path) "{{{
+  let path = a:path
+  if path == ''
+    let path = s:substitute_path_separator(
+          \  expand('~/.unite/directory_mru'))
+  endif
+
+  let s:directory_mru.candidates = s:uniq(
+        \ s:directory_mru.candidates + s:import(path))
+endfunction"}}}
 function! neomru#_get_mrus()  "{{{
   return s:MRUs
 endfunction"}}}
@@ -365,6 +385,23 @@ function! s:uniq_by(list, f) "{{{
 endfunction"}}}
 function! s:is_file_exist(path)  "{{{
   return a:path !~ '^\a\w\+:' && getftype(a:path) ==# 'file'
+endfunction"}}}
+function! s:import(path)  "{{{
+  if !filereadable(a:path)
+    echohl Error | echomsg printf(
+          \ '[neomru] path "%s" is not found.', a:path) | echohl None
+    return
+  endif
+
+  let [ver; items] = readfile(a:path)
+  let candidates = map(items, "split(v:val, '\t')[0]")
+  " Load long file.
+  if filereadable(a:path . '_long')
+    let [ver; items] = readfile(a:path . '_long')
+    let candidates += map(items, "split(v:val, '\t')[0]")
+  endif
+
+  return map(candidates, "substitute(v:val, '/$', '', '')")
 endfunction"}}}
 "}}}
 "

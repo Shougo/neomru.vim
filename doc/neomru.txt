@@ -48,6 +48,9 @@ USAGE						*neomru-usage*
 	nnoremap <silent> [unite]d
 	        \ :<C-u>Unite -buffer-name=files -default-action=lcd neomru/directory<CR>
 <
+	Note: To import previous version of unite mru candidates, you must use
+	|:NeoMRUImportFile| and |:NeoMRUImportDirectory| commands.
+
 ==============================================================================
 INSTALL						*neomru-install*
 
@@ -172,6 +175,14 @@ COMMANDS 					*neomru-commands*
 
 :NeoMRUReload					*:NeoMRUReload*
 		Reload MRU files.
+
+:NeoMRUImportFile [{path}]			*:NeoMRUImportFile*
+		Import previous version of MRU files.
+		If {path} is omitted, "~/.unite/file_mru" is used.
+
+:NeoMRUImportDirectory [{path}]			*:NeoMRUImportDirectory*
+		Import previous version of MRU directories.
+		If {path} is omitted, "~/.unite/directory_mru" is used.
 
 ==============================================================================
 FAQ						*neomru-faq*

@@ -36,6 +36,11 @@ set cpo&vim
 
 command! NeoMRUReload call neomru#_reload()
 
+command! -nargs=? -complete=file NeoMRUImportFile
+      \ call neomru#_import_file(<q-args>)
+command! -nargs=? -complete=file NeoMRUImportDirectory
+      \ call neomru#_import_directory(<q-args>)
+
 augroup neomru
   autocmd!
   autocmd BufEnter,VimEnter,BufNew,BufWinEnter *
