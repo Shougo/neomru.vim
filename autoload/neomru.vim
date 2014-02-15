@@ -161,11 +161,6 @@ function! s:mru.save(...) "{{{
     call extend(opts, a:1)
   endif
 
-  let self.candidates = []
-
-  " should load all candidates
-  call self.load(1) " load candidates
-
   if self.has_external_update() && filereadable(self.mru_file)
     " only need to get the list which contains the latest MRUs
     let [ver; items] = readfile(self.mru_file)
@@ -175,14 +170,14 @@ function! s:mru.save(...) "{{{
   endif
 
   let self.candidates = s:uniq(self.candidates)
+  let self.candidates = self.candidates[: self.limit - 1]
 
   if get(opts, 'event') ==# 'VimLeavePre'
     call self.validate()
   endif
 
   call s:writefile(self.mru_file,
-        \ [self.version] +
-        \ self.candidates[: self.limit - 1])
+        \ [self.version] + self.candidates)
 
   let self.mtime = getftime(self.mru_file)
 endfunction"}}}
@@ -231,10 +226,12 @@ endfunction"}}}
 function! s:mru.append(path)  "{{{
   call s:mru.load()
   let index = index(self.candidates, a:path)
-  if index > 0
+  if index >= 0
     call remove(self.candidates, index)
   endif
   call insert(self.candidates, a:path)
+
+  let self.candidates = self.candidates[: self.limit - 1]
 endfunction"}}}
 function! s:mru.version_check(ver)  "{{{
   if str2float(a:ver) < self.version
