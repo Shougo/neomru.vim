@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neomru.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 12 Feb 2014.
+" Last Modified: 15 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -34,12 +34,14 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
+command! NeoMRUReload call neomru#_reload()
+
 augroup neomru
   autocmd!
   autocmd BufEnter,VimEnter,BufNew,BufWinEnter *
         \ call s:append(expand('<amatch>'))
   autocmd VimLeavePre *
-        \ call unite#sources#mru#_save({'event' : 'VimLeavePre'})
+        \ call neomru#_save({'event' : 'VimLeavePre'})
 augroup END
 
 let g:loaded_neomru = 1
@@ -50,7 +52,7 @@ function! s:append(path) "{{{
     return
   endif
 
-  call unite#sources#mru#variables#append()
+  call neomru#_append()
 endfunction"}}}
 
 let &cpo = s:save_cpo

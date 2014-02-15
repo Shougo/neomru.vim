@@ -167,6 +167,12 @@ directory_mru
 		Nominates directories you used recently as candidates,
 		ordering by time series.
 
+------------------------------------------------------------------------------
+COMMANDS 					*neomru-commands*
+
+:NeoMRUReload					*:NeoMRUReload*
+		Reload MRU files.
+
 ==============================================================================
 FAQ						*neomru-faq*
 

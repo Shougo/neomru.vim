@@ -28,8 +28,6 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-let s:is_windows = has('win16') || has('win32') || has('win64') || has('win95')
-
 function! neomru#set_default(var, val, ...)  "{{{
   if !exists(a:var) || type({a:var}) != type(a:val)
     let alternate_var = get(a:000, 0, '')
@@ -45,6 +43,8 @@ endfunction"}}}
 " Variables  "{{{
 " The version of MRU file format.
 let s:VERSION = '0.3.0'
+
+let s:is_windows = has('win16') || has('win32') || has('win64') || has('win95')
 
 call neomru#set_default(
       \ 'g:neomru#do_validate', 1,
@@ -125,12 +125,6 @@ let s:mru = {
 function! s:mru.is_a(type) "{{{
   return self.type == a:type
 endfunction "}}}
-function! s:mru.save(...)
-    throw 'unite(mru) umimplemented method: save()!'
-endfunction
-function! s:mru.load()
-    throw 'unite(mru) umimplemented method: load()!'
-endfunction
 function! s:mru.validate()
     throw 'unite(mru) umimplemented method: validate()!'
 endfunction
@@ -140,16 +134,8 @@ function! s:mru.gather_candidates(args, context) "{{{
     call self.load()
   endif
 
-  let self.candidates = unite#sources#mru#variables#get_mrus(self.type)
-        \ + self.candidates
-  call unite#sources#mru#variables#clear(self.type)
-
   if a:context.is_redraw && g:neomru#do_validate
-    call filter(self.candidates,
-          \ ((self.type == 'file') ?
-          \ "v:val !~ '^\\a\\w\\+:'
-          \       && filereadable(v:val)" :
-          \ "isdirectory(v:val)"))
+    call self.reload()
   endif
 
   return map(copy(self.candidates), "{
@@ -175,19 +161,10 @@ function! s:mru.save(...) "{{{
     call extend(opts, a:1)
   endif
 
-  if empty(unite#sources#mru#variables#get_mrus(self.type))
-    " nothing to save, mru is not loaded
-    return
-  endif
-
   let self.candidates = []
 
   " should load all candidates
   call self.load(1) " load candidates
-
-  let self.candidates = unite#sources#mru#variables#get_mrus(self.type)
-        \ + self.candidates
-  call unite#sources#mru#variables#clear(self.type)
 
   if self.has_external_update() && filereadable(self.mru_file)
     " only need to get the list which contains the latest MRUs
@@ -214,7 +191,7 @@ function! s:mru.load(...)  "{{{
   let is_force = get(a:000, 0, 0)
 
   " everything is loaded, done!
-  if !is_force && self.is_loaded >= 2
+  if !is_force && self.is_loaded && !self.has_external_update()
     return
   endif
 
@@ -237,10 +214,27 @@ function! s:mru.load(...)  "{{{
   " Assume properly saved and sorted. unique sort is not necessary here
   call extend(self.candidates, items)
 
-  let self.candidates = s:uniq(self.candidates)
+  if self.is_loaded
+    let self.candidates = s:uniq(self.candidates)
+  endif
 
   let self.mtime = getftime(mru_file)
   let self.is_loaded = 1
+endfunction"}}}
+function! s:mru.reload()  "{{{
+  call self.load(1)
+
+  call filter(self.candidates,
+        \ ((self.type == 'file') ?
+        \ "s:is_file_exist(v:val)" : "isdirectory(v:val)"))
+endfunction"}}}
+function! s:mru.append(path)  "{{{
+  call s:mru.load()
+  let index = index(self.candidates, a:path)
+  if index > 0
+    call remove(self.candidates, index)
+  endif
+  call insert(self.candidates, a:path)
 endfunction"}}}
 function! s:mru.version_check(ver)  "{{{
   if str2float(a:ver) < self.version
@@ -264,7 +258,7 @@ let s:file_mru = extend(deepcopy(s:mru), {
       \)
 function! s:file_mru.validate()  "{{{
   if self.do_validate
-    call filter(self.candidates, 'getftype(v:val) ==# "file"')
+    call filter(self.candidates, 's:is_file_exist(v:val)')
   endif
 endfunction"}}}
 
@@ -291,6 +285,47 @@ function! neomru#init()  "{{{
 endfunction"}}}
 function! neomru#_get_mrus()  "{{{
   return s:MRUs
+endfunction"}}}
+function! neomru#_append() "{{{
+  if &l:buftype =~ 'help\|nofile'
+    return
+  endif
+
+  let path = s:substitute_path_separator(expand('%:p'))
+  if path !~ '\a\+:'
+    let path = s:substitute_path_separator(
+          \ simplify(resolve(path)))
+  endif
+
+  " Append the current buffer to the mru list.
+  if s:is_file_exist(path)
+    call s:file_mru.append(path)
+  endif
+
+  let filetype = getbufvar(bufnr('%'), '&filetype')
+  if filetype ==# 'vimfiler' &&
+        \ type(getbufvar(bufnr('%'), 'vimfiler')) == type({})
+    let path = getbufvar(bufnr('%'), 'vimfiler').current_dir
+  elseif filetype ==# 'vimshell' &&
+        \ type(getbufvar(bufnr('%'), 'vimshell')) == type({})
+    let path = getbufvar(bufnr('%'), 'vimshell').current_dir
+  else
+    let path = getcwd()
+  endif
+
+  let path = s:substitute_path_separator(simplify(resolve(path)))
+  " Chomp last /.
+  let path = substitute(path, '/$', '', '')
+
+  " Append the current buffer to the mru list.
+  if isdirectory(path)
+    call s:directory_mru.append(path)
+  endif
+endfunction"}}}
+function! neomru#_reload() "{{{
+  for m in values(s:MRUs)
+    call m.reload()
+  endfor
 endfunction"}}}
 function! neomru#_save(...) "{{{
   let opts = {}
@@ -330,6 +365,9 @@ function! s:uniq_by(list, f) "{{{
     endif
   endwhile
   return map(list, 'v:val[0]')
+endfunction"}}}
+function! s:is_file_exist(path)  "{{{
+  return a:path !~ '^\a\w\+:' && getftype(a:path) ==# 'file'
 endfunction"}}}
 "}}}
 "
