@@ -1,6 +1,6 @@
 "=============================================================================
 " FILE: neomru.vim
-" AUTHOR:  Zhso Cai <caizhaoff@gmail.com>
+" AUTHOR:  Zhao Cai <caizhaoff@gmail.com>
 "          Shougo Matsushita <Shougo.Matsu at gmail.com>
 " Last Modified: 15 Feb 2014.
 " License: MIT license  {{{
