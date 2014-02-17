@@ -2,7 +2,7 @@
 " FILE: neomru.vim
 " AUTHOR:  Zhao Cai <caizhaoff@gmail.com>
 "          Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 17 Feb 2014.
+" Last Modified: 18 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -130,7 +130,7 @@ function! s:mru.validate()
 endfunction
 
 function! s:mru.gather_candidates(args, context) "{{{
-  if empty(self.candidates)
+  if !self.is_loaded
     call self.load()
   endif
 
@@ -226,7 +226,11 @@ endfunction"}}}
 function! s:mru.append(path)  "{{{
   call s:mru.load()
   let index = index(self.candidates, a:path)
-  if index >= 0
+  if index == 0
+    return
+  endif
+
+  if index > 0
     call remove(self.candidates, index)
   endif
   call insert(self.candidates, a:path)
@@ -287,7 +291,7 @@ function! neomru#_import_file(path) "{{{
   endif
 
   let s:file_mru.candidates = s:uniq(
-        \ s:file_mru.candidates + import(path))
+        \ s:file_mru.candidates + s:import(path))
 endfunction"}}}
 function! neomru#_import_directory(path) "{{{
   let path = a:path
