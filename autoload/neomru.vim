@@ -392,7 +392,7 @@ endfunction"}}}
 function! s:import(path)  "{{{
   if !filereadable(a:path)
     call s:print_error(printf('path "%s" is not found.', a:path))
-    return
+    return []
   endif
 
   let [ver; items] = readfile(a:path)
