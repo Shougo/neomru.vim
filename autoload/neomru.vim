@@ -2,7 +2,7 @@
 " FILE: neomru.vim
 " AUTHOR:  Zhao Cai <caizhaoff@gmail.com>
 "          Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 15 Feb 2014.
+" Last Modified: 17 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -235,8 +235,7 @@ function! s:mru.append(path)  "{{{
 endfunction"}}}
 function! s:mru.version_check(ver)  "{{{
   if str2float(a:ver) < self.version
-    call unite#util#print_error(
-          \ 'Sorry, the version of MRU file is old.')
+    call s:print_error('Sorry, the version of MRU file is old.')
     return 0
   else
     return 1
@@ -388,8 +387,7 @@ function! s:is_file_exist(path)  "{{{
 endfunction"}}}
 function! s:import(path)  "{{{
   if !filereadable(a:path)
-    echohl Error | echomsg printf(
-          \ '[neomru] path "%s" is not found.', a:path) | echohl None
+    call s:print_error(printf('path "%s" is not found.', a:path))
     return
   endif
 
@@ -402,6 +400,9 @@ function! s:import(path)  "{{{
   endif
 
   return map(candidates, "substitute(v:val, '/$', '', '')")
+endfunction"}}}
+function! s:print_error(msg)  "{{{
+  echohl Error | echomsg '[neomru] ' . a:msg | echohl None
 endfunction"}}}
 "}}}
 "
