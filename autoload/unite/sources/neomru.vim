@@ -124,7 +124,7 @@ function! s:converter(candidates, context) "{{{
         \ "!has_key(v:val, 'abbr')")
     let path = (g:neomru#filename_format == '') ?  candidate.action__path :
           \ unite#util#substitute_path_separator(
-          \   fnamemodify(candidate.action__path, a:filename_format))
+          \   fnamemodify(candidate.action__path, g:neomru#filename_format))
     if path == ''
       let path = candidate.action__path
     endif
