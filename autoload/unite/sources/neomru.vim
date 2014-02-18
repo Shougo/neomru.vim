@@ -74,6 +74,9 @@ function! s:file_mru_source.hooks.on_post_filter(args, context) "{{{
 endfunction"}}}
 function! s:dir_mru_source.hooks.on_post_filter(args, context) "{{{
   for candidate in a:context.candidates
+    if !has_key(candidate, 'abbr')
+      let candidate.abbr = candidate.word
+    endif
     if candidate.abbr !~ '/$'
       let candidate.abbr .= '/'
     endif
