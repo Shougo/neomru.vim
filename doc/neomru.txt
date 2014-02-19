@@ -104,8 +104,6 @@ g:neomru#update_interval
 g:neomru#file_mru_path				*g:neomru#file_mru_path*
 		Specifies the file to write the information of most recent
 		used files.
-						*g:unite_source_file_mru_file*
-		Note: It is deprecated name.
 
 		The default value is '~/.cache/neomru/file'
 
@@ -129,9 +127,6 @@ g:neomru#file_mru_ignore_pattern
 
 						*g:neomru#directory_mru_path*
 g:neomru#directory_mru_path
-
-					*g:unite_source_directory_mru_file*
-		Note: It is deprecated name.
 
 		The default value is '~/.cache/neomru/directory'
 
