@@ -2,7 +2,7 @@
 " FILE: neomru.vim
 " AUTHOR:  Zhao Cai <caizhaoff@gmail.com>
 "          Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 18 Feb 2014.
+" Last Modified: 20 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -61,8 +61,7 @@ call neomru#set_default(
 call neomru#set_default(
       \ 'g:neomru#file_mru_path',
       \ s:substitute_path_separator(
-      \  expand('~/.cache/neomru/file')),
-      \ 'g:unite_source_file_mru_file',)
+      \  expand('~/.cache/neomru/file')))
 call neomru#set_default(
       \ 'g:neomru#file_mru_limit',
       \ 1000, 'g:unite_source_file_mru_limit')
@@ -77,8 +76,7 @@ call neomru#set_default(
 call neomru#set_default(
       \ 'g:neomru#directory_mru_path',
       \ s:substitute_path_separator(
-      \  expand('~/.cache/neomru/directory')),
-      \ 'g:unite_source_directory_mru_file')
+      \  expand('~/.cache/neomru/directory')))
 call neomru#set_default(
       \ 'g:neomru#directory_mru_limit',
       \ 1000, 'g:unite_source_directory_mru_limit')
