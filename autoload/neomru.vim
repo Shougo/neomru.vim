@@ -237,7 +237,7 @@ function! s:mru.append(path)  "{{{
 endfunction"}}}
 function! s:mru.version_check(ver)  "{{{
   if str2float(a:ver) < self.version
-    call s:print_error('Sorry, the version of MRU file is old.')
+    call s:print_error('Sorry, the version of MRU file is too old.')
     return 0
   else
     return 1
@@ -394,6 +394,11 @@ function! s:import(path)  "{{{
   endif
 
   let [ver; items] = readfile(a:path)
+  if ver != '0.2.0'
+    call s:print_error('Sorry, the version of MRU file is too old.')
+    return []
+  endif
+
   let candidates = map(items, "split(v:val, '\t')[0]")
   " Load long file.
   if filereadable(a:path . '_long')
