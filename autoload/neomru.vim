@@ -348,10 +348,7 @@ function! neomru#_reload() "{{{
   endfor
 endfunction"}}}
 function! neomru#_save(...) "{{{
-  let opts = {}
-  if a:0 >= 1 && type(a:1) == type({})
-    call extend(opts, a:1)
-  endif
+  let opts = a:0 >= 1 && type(a:1) == type({}) ? a:1 : {}
 
   for m in values(s:MRUs)
     call m.save(opts)
