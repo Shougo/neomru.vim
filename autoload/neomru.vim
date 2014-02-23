@@ -154,10 +154,7 @@ function! s:mru.has_external_update() "{{{
 endfunction"}}}
 
 function! s:mru.save(...) "{{{
-  let opts = {}
-  if a:0 >= 1 && type(a:1) == type({})
-    call extend(opts, a:1)
-  endif
+  let opts = a:0 >= 1 && type(a:1) == type({}) ? a:1 : {}
 
   if self.has_external_update() && filereadable(self.mru_file)
     " only need to get the list which contains the latest MRUs
@@ -168,7 +165,9 @@ function! s:mru.save(...) "{{{
   endif
 
   let self.candidates = s:uniq(self.candidates)
-  let self.candidates = self.candidates[: self.limit - 1]
+  if len(self.candidates) > self.limit
+    let self.candidates = self.candidates[: self.limit - 1]
+  endif
 
   if get(opts, 'event') ==# 'VimLeavePre'
     call self.validate()
