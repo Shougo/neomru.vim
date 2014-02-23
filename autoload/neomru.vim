@@ -2,7 +2,7 @@
 " FILE: neomru.vim
 " AUTHOR:  Zhao Cai <caizhaoff@gmail.com>
 "          Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 20 Feb 2014.
+" Last Modified: 23 Feb 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -233,7 +233,9 @@ function! s:mru.append(path)  "{{{
   endif
   call insert(self.candidates, a:path)
 
-  let self.candidates = self.candidates[: self.limit - 1]
+  if len(self.candidates) > self.limit
+    let self.candidates = self.candidates[: self.limit - 1]
+  endif
 endfunction"}}}
 function! s:mru.version_check(ver)  "{{{
   if str2float(a:ver) < self.version
