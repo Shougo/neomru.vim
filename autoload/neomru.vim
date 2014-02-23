@@ -292,6 +292,7 @@ function! neomru#_import_file(path) "{{{
 
   let s:file_mru.candidates = s:uniq(
         \ s:file_mru.candidates + s:import(path))
+  call s:file_mru.save()
 endfunction"}}}
 function! neomru#_import_directory(path) "{{{
   let path = a:path
@@ -302,6 +303,7 @@ function! neomru#_import_directory(path) "{{{
 
   let s:directory_mru.candidates = s:uniq(
         \ s:directory_mru.candidates + s:import(path))
+  call s:directory_mru.save()
 endfunction"}}}
 function! neomru#_get_mrus()  "{{{
   return s:MRUs
@@ -405,7 +407,8 @@ function! s:import(path)  "{{{
     let candidates += map(items, "split(v:val, '\t')[0]")
   endif
 
-  return map(candidates, "substitute(v:val, '/$', '', '')")
+  return map(candidates, "substitute(s:substitute_path_separator(
+        \ v:val), '/$', '', '')")
 endfunction"}}}
 function! s:print_error(msg)  "{{{
   echohl Error | echomsg '[neomru] ' . a:msg | echohl None
