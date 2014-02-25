@@ -171,6 +171,9 @@ COMMANDS 					*neomru-commands*
 :NeoMRUReload					*:NeoMRUReload*
 		Reload MRU files.
 
+:NeoMRUSave					*:NeoMRUSave*
+		Save MRU files manually.
+
 :NeoMRUImportFile [{path}]			*:NeoMRUImportFile*
 		Import previous version of MRU files.
 		If {path} is omitted, "~/.unite/file_mru" is used.
