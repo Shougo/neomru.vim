@@ -2,7 +2,7 @@
 " FILE: neomru.vim
 " AUTHOR:  Zhao Cai <caizhaoff@gmail.com>
 "          Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 26 Feb 2014.
+" Last Modified: 03 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -360,11 +360,12 @@ endfunction"}}}
 
 " Misc "{{{
 function! s:writefile(path, list) "{{{
-  if !isdirectory(fnamemodify(a:path, ':p:h'))
-    call mkdir(fnamemodify(a:path, ':p:h'), 'p')
+  let path = fnamemodify(a:path, ':p')
+  if !isdirectory(fnamemodify(path, ':h'))
+    call mkdir(fnamemodify(path, ':h'), 'p')
   endif
 
-  call writefile(a:list, a:path)
+  call writefile(a:list, path)
 endfunction"}}}
 function! s:uniq(list, ...) "{{{
   return s:uniq_by(a:list, 'v:val')
