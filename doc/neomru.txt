@@ -117,6 +117,7 @@ g:neomru#file_mru_limit				*g:neomru#file_mru_limit*
 
 					*g:neomru#file_mru_ignore_pattern*
 g:neomru#file_mru_ignore_pattern
+		The ignore regex pattern of neomru/file source.
 		Refer autoload/neomru.vim about the default
 		value.
 		Note: This variable is deprecated.  Please use
@@ -139,6 +140,10 @@ g:neomru#directory_mru_limit
 
 					*g:neomru#directory_mru_ignore_pattern*
 g:neomru#directory_mru_ignore_pattern
+		The ignore regexp pattern of neomru/directory source.
+		Refer autoload/neomru.vim about the default
+		value.
+
 				*g:unite_source_directory_mru_ignore_pattern*
 		Note: It is deprecated name.
 

@@ -2,7 +2,7 @@
 " FILE: neomru.vim
 " AUTHOR:  Zhao Cai <caizhaoff@gmail.com>
 "          Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 03 Mar 2014.
+" Last Modified: 17 Mar 2014.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -218,7 +218,7 @@ function! s:mru.reload()  "{{{
 
   call filter(self.candidates,
         \ ((self.type == 'file') ?
-        \ "s:is_file_exist(v:val)" : "isdirectory(v:val)"))
+        \ "s:is_file_exist(v:val)" : "s:is_directory_exist(v:val)"))
 endfunction"}}}
 function! s:mru.append(path)  "{{{
   call self.load()
@@ -339,7 +339,7 @@ function! neomru#_append() "{{{
   let path = substitute(path, '/$', '', '')
 
   " Append the current buffer to the mru list.
-  if isdirectory(path)
+  if s:is_directory_exist(path)
     call s:directory_mru.append(path)
   endif
 endfunction"}}}
@@ -386,7 +386,11 @@ function! s:uniq_by(list, f) "{{{
   return map(list, 'v:val[0]')
 endfunction"}}}
 function! s:is_file_exist(path)  "{{{
-  return a:path !~ '^\a\w\+:' && getftype(a:path) ==# 'file'
+  return a:path !~ '^\a\w\+:\|\%(' . g:neomru#file_mru_ignore_pattern . '\)'
+        \ && getftype(a:path) ==# 'file'
+endfunction"}}}
+function! s:is_directory_exist(path)  "{{{
+  return isdirectory(a:path) && a:path !~ g:neomru#directory_mru_ignore_pattern
 endfunction"}}}
 function! s:import(path)  "{{{
   if !filereadable(a:path)
