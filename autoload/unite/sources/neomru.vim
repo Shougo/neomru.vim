@@ -2,7 +2,6 @@
 " FILE: neomru.vim
 " AUTHOR:  Zhao Cai <caizhaoff@gmail.com>
 "          Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 18 Feb 2014
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
