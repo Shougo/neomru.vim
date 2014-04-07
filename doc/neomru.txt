@@ -105,7 +105,7 @@ g:neomru#file_mru_path				*g:neomru#file_mru_path*
 		Specifies the file to write the information of most recent
 		used files.
 
-		The default value is '~/.cache/neomru/file'
+		The default value is expand('~/.cache/neomru/file')
 
 g:neomru#file_mru_limit				*g:neomru#file_mru_limit*
 		The number of recent file candidates to show in default
@@ -129,7 +129,7 @@ g:neomru#file_mru_ignore_pattern
 						*g:neomru#directory_mru_path*
 g:neomru#directory_mru_path
 
-		The default value is '~/.cache/neomru/directory'
+		The default value is expand('~/.cache/neomru/directory')
 
 						*g:neomru#directory_mru_limit*
 g:neomru#directory_mru_limit
