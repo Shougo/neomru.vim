@@ -367,7 +367,7 @@ function! s:writefile(path, list) "{{{
   call writefile(a:list, path)
 endfunction"}}}
 function! s:uniq(list, ...) "{{{
-  return s:uniq_by(a:list, 'v:val')
+  return s:uniq_by(a:list, 'tolower(v:val)')
 endfunction"}}}
 function! s:uniq_by(list, f) "{{{
   let list = map(copy(a:list), printf('[v:val, %s]', a:f))
