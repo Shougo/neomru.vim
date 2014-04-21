@@ -99,7 +99,7 @@ let s:file_mru_source.action_table.delete = {
       \ 'is_selectable' : 1,
       \ }
 function! s:file_mru_source.action_table.delete.func(candidates) "{{{
-  call s:MRUs.file.delete(a:candidates)
+  call neomru#_get_mrus().file.delete(a:candidates)
 endfunction"}}}
 
 let s:dir_mru_source.action_table.delete = {
@@ -109,7 +109,7 @@ let s:dir_mru_source.action_table.delete = {
       \ 'is_selectable' : 1,
       \ }
 function! s:dir_mru_source.action_table.delete.func(candidates) "{{{
-  call s:MRUs.directory.delete(a:candidates)
+  call neomru#_get_mrus().directory.delete(a:candidates)
 endfunction"}}}
 "}}}
 
