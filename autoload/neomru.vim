@@ -153,6 +153,10 @@ function! s:mru.has_external_update() "{{{
 endfunction"}}}
 
 function! s:mru.save(...) "{{{
+  if s:is_sudo()
+    return
+  endif
+
   let opts = a:0 >= 1 && type(a:1) == type({}) ? a:1 : {}
 
   if self.has_external_update() && filereadable(self.mru_file)
@@ -418,6 +422,11 @@ function! s:import(path)  "{{{
 endfunction"}}}
 function! s:print_error(msg)  "{{{
   echohl Error | echomsg '[neomru] ' . a:msg | echohl None
+endfunction"}}}
+function! s:is_sudo() "{{{
+  return $SUDO_USER != '' && $USER !=# $SUDO_USER
+        \ && $HOME !=# expand('~'.$USER)
+        \ && $HOME ==# expand('~'.$SUDO_USER)
 endfunction"}}}
 "}}}
 "
