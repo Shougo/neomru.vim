@@ -135,7 +135,9 @@ function! s:mru.gather_candidates(args, context) "{{{
     call self.reload()
   endif
 
-  return map(copy(self.candidates), "{
+  return exists('*unite#helper#paths2candidates') ?
+        \ unite#helper#paths2candidates(self.candidates) :
+        \ map(copy(self.candidates), "{
         \ 'word' : v:val,
         \ 'action__path' : v:val,
         \}")
