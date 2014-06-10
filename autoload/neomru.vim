@@ -66,9 +66,9 @@ call neomru#set_default(
       \ 1000, 'g:unite_source_file_mru_limit')
 call neomru#set_default(
       \ 'g:neomru#file_mru_ignore_pattern',
-      \'\~$\|\.\%(o\|exe\|dll\|bak\|zwc\|pyc\|sw[po]\)$'
-      \'\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
-      \'\|^\%(\\\\\|/mnt/\|/media/\|/temp/\|/tmp/\|\%(/private\)\=/var/folders/\)'
+      \'\~$\|\.\%(o\|exe\|dll\|bak\|zwc\|pyc\|sw[po]\)$'.
+      \'\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'.
+      \'\|^\%(\\\\\|/mnt/\|/media/\|/temp/\|/tmp/\|\%(/private\)\=/var/folders/\)'.
       \'\|\%(^\%(fugitive\)://\)'
       \, 'g:unite_source_file_mru_ignore_pattern')
 
@@ -81,7 +81,7 @@ call neomru#set_default(
       \ 1000, 'g:unite_source_directory_mru_limit')
 call neomru#set_default(
       \ 'g:neomru#directory_mru_ignore_pattern',
-      \'\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'
+      \'\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'.
       \'\|^\%(\\\\\|/mnt/\|/media/\|/temp/\|/tmp/\|\%(/private\)\=/var/folders/\)',
       \ 'g:unite_source_directory_mru_ignore_pattern')
 "}}}
