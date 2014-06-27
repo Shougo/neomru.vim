@@ -45,6 +45,9 @@ let s:VERSION = '0.3.0'
 
 let s:is_windows = has('win16') || has('win32') || has('win64') || has('win95')
 
+let s:base = expand($XDG_CACHE_DIR != '' ?
+        \   $XDG_CACHE_DIR . '/neomru' : '~/.cache/neomru')
+
 call neomru#set_default(
       \ 'g:neomru#do_validate', 1,
       \ 'g:unite_source_mru_do_validate')
@@ -59,8 +62,7 @@ call neomru#set_default(
       \ 'g:unite_source_file_mru_filename_format')
 call neomru#set_default(
       \ 'g:neomru#file_mru_path',
-      \ s:substitute_path_separator(
-      \  expand('~/.cache/neomru/file')))
+      \ s:substitute_path_separator(s:base.'/file'))
 call neomru#set_default(
       \ 'g:neomru#file_mru_limit',
       \ 1000, 'g:unite_source_file_mru_limit')
@@ -74,8 +76,7 @@ call neomru#set_default(
 
 call neomru#set_default(
       \ 'g:neomru#directory_mru_path',
-      \ s:substitute_path_separator(
-      \  expand('~/.cache/neomru/directory')))
+      \ s:substitute_path_separator(s:base.'/directory'))
 call neomru#set_default(
       \ 'g:neomru#directory_mru_limit',
       \ 1000, 'g:unite_source_directory_mru_limit')
