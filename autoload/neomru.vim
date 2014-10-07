@@ -52,7 +52,7 @@ call neomru#set_default(
       \ 'g:neomru#do_validate', 1,
       \ 'g:unite_source_mru_do_validate')
 call neomru#set_default(
-      \ 'g:neomru#update_interval', 600,
+      \ 'g:neomru#update_interval', 0,
       \ 'g:unite_source_mru_update_interval')
 call neomru#set_default(
       \ 'g:neomru#time_format', '',
@@ -240,6 +240,10 @@ function! s:mru.append(path)  "{{{
 
   if len(self.candidates) > self.limit
     let self.candidates = self.candidates[: self.limit - 1]
+  endif
+
+  if localtime() > getftime(self.mru_file) + self.update_interval
+    call self.save()
   endif
 endfunction"}}}
 function! s:mru.version_check(ver)  "{{{
