@@ -161,8 +161,6 @@ file_mru
 		Nominates files you used recently as candidates, ordering
 		by time series.
 
-		If argument 1 is "!", current file is displayed.
-
 		The mru code is overhauled to tracking long mru history.
 		Set a large number like 5000 for the long limit will not
 		impact vim performance.

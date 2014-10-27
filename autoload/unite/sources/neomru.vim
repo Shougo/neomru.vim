@@ -56,13 +56,6 @@ let s:dir_mru_source = {
       \ 'max_candidates' : 200,
       \}
 
-function! s:file_mru_source.hooks.on_init(args, context) "{{{
-  let a:context.source__is_bang =
-        \ (get(a:args, 0, '') ==# '!')
-  let a:context.source__current_file =
-        \ unite#util#substitute_path_separator(
-        \   fnamemodify(bufname('%'), ':p'))
-endfunction"}}}
 function! s:file_mru_source.hooks.on_syntax(args, context) "{{{
   syntax match uniteSource__FileMru_Time
         \ /([^)]*)\s\+/
@@ -90,12 +83,8 @@ function! s:dir_mru_source.hooks.on_post_filter(args, context) "{{{
   return s:on_post_filter(a:args, a:context)
 endfunction"}}}
 function! s:file_mru_source.gather_candidates(args, context) "{{{
-  let candidates = neomru#_get_mrus().file
-        \.gather_candidates(a:args, a:context)
-  return empty(candidates) ? [] :
-        \ (!a:context.source__is_bang &&
-        \   candidates[0].action__path ==# a:context.source__current_file) ?
-        \ candidates[1:] : candidates
+  let mru = neomru#_get_mrus().file
+  return mru.gather_candidates(a:args, a:context)
 endfunction"}}}
 function! s:dir_mru_source.gather_candidates(args, context) "{{{
   let mru = neomru#_get_mrus().directory
