@@ -105,7 +105,7 @@ g:neomru#file_mru_path				*g:neomru#file_mru_path*
 		Specifies the file to write the information of most recent
 		used files.
 
-		Default value is "$XDG_CACHE_DIR/neomru/file" or
+		Default value is "$XDG_CACHE_HOME/neomru/file" or
 		expand("~/.cache/neomru/file"); the absolute path of it.
 
 g:neomru#file_mru_limit				*g:neomru#file_mru_limit*
@@ -130,7 +130,7 @@ g:neomru#file_mru_ignore_pattern
 						*g:neomru#directory_mru_path*
 g:neomru#directory_mru_path
 
-		Default value is "$XDG_CACHE_DIR/neomru/directory" or
+		Default value is "$XDG_CACHE_HOME/neomru/directory" or
 		expand("~/.cache/neomru/directory"); the absolute path of it.
 
 						*g:neomru#directory_mru_limit*
