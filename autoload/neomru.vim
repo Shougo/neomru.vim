@@ -45,8 +45,8 @@ let s:VERSION = '0.3.0'
 
 let s:is_windows = has('win16') || has('win32') || has('win64') || has('win95')
 
-let s:base = expand($XDG_CACHE_DIR != '' ?
-        \   $XDG_CACHE_DIR . '/neomru' : '~/.cache/neomru')
+let s:base = expand($XDG_CACHE_HOME != '' ?
+        \   $XDG_CACHE_HOME . '/neomru' : '~/.cache/neomru')
 
 call neomru#set_default(
       \ 'g:neomru#do_validate', 1,
