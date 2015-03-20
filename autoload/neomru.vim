@@ -318,7 +318,7 @@ function! neomru#_get_mrus()  "{{{
   return s:MRUs
 endfunction"}}}
 function! neomru#_append() "{{{
-  if &l:buftype =~ 'help\|nofile'
+  if &l:buftype =~ 'help\|nofile' || &l:previewwindow
     return
   endif
 
