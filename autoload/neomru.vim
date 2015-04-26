@@ -396,14 +396,16 @@ function! s:uniq_by(list, f) "{{{
   return map(list, 'v:val[0]')
 endfunction"}}}
 function! s:is_file_exist(path)  "{{{
-  return (g:neomru#file_mru_ignore_pattern == '' ||
-        \ a:path !~ '^\a\w\+:\|\%(' . g:neomru#file_mru_ignore_pattern . '\)')
-        \ && getftype(a:path) ==# 'file'
+  return a:path =~ '^\h\w\+:'
+        \ || (getftype(a:path) ==# 'file'
+        \     && (g:neomru#file_mru_ignore_pattern == ''
+        \         || a:path !~ g:neomru#file_mru_ignore_pattern))
 endfunction"}}}
 function! s:is_directory_exist(path)  "{{{
-  return isdirectory(a:path) &&
-        \ (g:neomru#directory_mru_ignore_pattern == '' ||
-        \  a:path !~ g:neomru#directory_mru_ignore_pattern)
+  return a:path =~ '^\h\w\+:'
+        \ || (isdirectory(a:path)
+        \     && (g:neomru#directory_mru_ignore_pattern == ''
+        \        || a:path !~ g:neomru#directory_mru_ignore_pattern))
 endfunction"}}}
 function! s:import(path)  "{{{
   if !filereadable(a:path)
