@@ -209,6 +209,12 @@ function! s:mru.load(...)  "{{{
     return
   endif
 
+  if self.type ==# 'file'
+    " Load from v:oldfiles
+    call extend(self.candidates, filter(v:oldfiles,
+          \ "getftype(v:val) ==# 'file'"))
+  endif
+
   " Assume properly saved and sorted. unique sort is not necessary here
   call extend(self.candidates, items)
 
