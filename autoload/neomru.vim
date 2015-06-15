@@ -211,7 +211,8 @@ function! s:mru.load(...)  "{{{
 
   if self.type ==# 'file'
     " Load from v:oldfiles
-    call extend(self.candidates, filter(v:oldfiles,
+    call extend(self.candidates, filter(map(v:oldfiles,
+          \ "s:substitute_path_separator(v:val)"),
           \ "getftype(v:val) ==# 'file'"))
   endif
 
