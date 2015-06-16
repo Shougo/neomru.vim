@@ -210,10 +210,6 @@ function! s:mru.load(...)  "{{{
   endif
 
   if self.type ==# 'file'
-    " Load from v:oldfiles
-    call extend(self.candidates, filter(map(v:oldfiles,
-          \ "s:substitute_path_separator(v:val)"),
-          \ "getftype(v:val) ==# 'file'"))
   endif
 
   " Assume properly saved and sorted. unique sort is not necessary here
@@ -306,8 +302,13 @@ function! neomru#_import_file(path) "{{{
       \  expand('~/.unite/file_mru'))
   endif
 
-  let s:file_mru.candidates = s:uniq(
-        \ s:file_mru.candidates + s:import(path))
+  let candidates = s:file_mru.candidates
+  let candidates += s:import(path)
+
+  " Load from v:oldfiles
+  let candidates += map(v:oldfiles, "s:substitute_path_separator(v:val)")
+
+  let s:file_mru.candidates = s:uniq(candidates)
   call s:file_mru.save()
 endfunction"}}}
 function! neomru#_import_directory(path) "{{{

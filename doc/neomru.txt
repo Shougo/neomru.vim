@@ -182,11 +182,13 @@ COMMANDS 					*neomru-commands*
 		Save MRU files manually.
 
 :NeoMRUImportFile [{path}]			*:NeoMRUImportFile*
-		Import previous version of MRU files.
+		Import the files from previous version of MRU {path} file and
+		|v:oldfiles|.
 		If {path} is omitted, "~/.unite/file_mru" is used.
 
 :NeoMRUImportDirectory [{path}]			*:NeoMRUImportDirectory*
-		Import previous version of MRU directories.
+		Import the directories from previous version of MRU {path}
+		file.
 		If {path} is omitted, "~/.unite/directory_mru" is used.
 
 ==============================================================================
