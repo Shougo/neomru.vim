@@ -71,7 +71,8 @@ call neomru#set_default(
       \'\~$\|\.\%(o\|exe\|dll\|bak\|zwc\|pyc\|sw[po]\)$'.
       \'\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'.
       \'\|^\%(\\\\\|/mnt/\|/media/\|/temp/\|/tmp/\|\%(/private\)\=/var/folders/\)'.
-      \'\|\%(^\%(fugitive\)://\)'
+      \'\|\%(^\%(fugitive\)://\)'.
+      \'\|\%(^\%(term\)://\)'
       \, 'g:unite_source_file_mru_ignore_pattern')
 
 call neomru#set_default(
