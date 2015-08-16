@@ -86,7 +86,7 @@ call neomru#set_default(
       \'\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)'.
       \'\|^\%(\\\\\|/mnt/\|/media/\|/temp/\|/tmp/\|\%(/private\)\=/var/folders/\)',
       \ 'g:unite_source_directory_mru_ignore_pattern')
-call neomru#set_default('g:neomru#follow_symlinks', 0)
+call neomru#set_default('g:neomru#follow_links', 0)
 "}}}
 
 " MRUs  "{{{
@@ -261,7 +261,7 @@ function! s:mru.version_check(ver)  "{{{
 endfunction"}}}
 
 function! s:resolve(fpath)  "{{{
-  return g:neomru#follow_symlinks ? resolve(a:fpath) : a:fpath
+  return g:neomru#follow_links ? resolve(a:fpath) : a:fpath
 endfunction"}}}
 
 "}}}
