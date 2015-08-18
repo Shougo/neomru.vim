@@ -150,6 +150,15 @@ g:neomru#directory_mru_ignore_pattern
 		Note: It is deprecated name.
 
 		The targets are directory mru.
+							*g:neomru#follow_links*
+g:neomru#follow_links
+		A boolean which determines whether symbolic or hard-linked
+		files should be followed (resolved): if false, symlinked
+		files and directories are listed in the unite buffer using the
+		symlink's path; if true, they are listed using the real path.
+
+		The default value is 0 (false).
+
 
 ------------------------------------------------------------------------------
 SOURCES						*neomru-sources*
