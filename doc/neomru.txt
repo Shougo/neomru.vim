@@ -30,6 +30,7 @@ Configuration Examples	|neomru-examples|
 Interface		|neomru-interface|
   Variables		  |neomru-variables|
   Sources		  |neomru-sources|
+  Commands		  |neomru-commands|
 FAQ			|neomru-faq|
 
 ==============================================================================
