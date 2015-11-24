@@ -43,7 +43,7 @@ command! -nargs=? -complete=file NeoMRUImportDirectory
 
 augroup neomru
   autocmd!
-  autocmd BufEnter,VimEnter,BufNew,BufWinEnter,BufWritePost *
+  autocmd BufEnter,VimEnter,BufWinEnter,BufWritePost *
         \ call s:append(expand('<amatch>'))
   autocmd VimLeavePre *
         \ call neomru#_save({'event' : 'VimLeavePre'})
