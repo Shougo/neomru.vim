@@ -187,6 +187,7 @@ COMMANDS 					*neomru-commands*
 
 :NeoMRUReload					*:NeoMRUReload*
 		Reload MRU files.
+		It validates the MRU files.
 
 :NeoMRUSave					*:NeoMRUSave*
 		Save MRU files manually.
