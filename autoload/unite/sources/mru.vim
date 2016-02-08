@@ -27,7 +27,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " For compatibility
-function! unite#sources#mru#define() "{{{
+function! unite#sources#mru#define() abort "{{{
   let [file_mru_source, dir_mru_source] =
         \ deepcopy(unite#sources#neomru#define())
   let file_mru_source.name = 'file_mru'

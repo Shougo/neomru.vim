@@ -51,7 +51,7 @@ augroup END
 
 let g:loaded_neomru = 1
 
-function! s:append(path) "{{{
+function! s:append(path) abort "{{{
   if bufnr('%') != expand('<abuf>')
         \ || a:path == ''
     return

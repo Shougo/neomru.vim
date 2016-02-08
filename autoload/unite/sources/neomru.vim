@@ -29,7 +29,7 @@ set cpo&vim
 
 " Source  "{{{
 call neomru#init()
-function! unite#sources#neomru#define() "{{{
+function! unite#sources#neomru#define() abort "{{{
   return [s:file_mru_source, s:dir_mru_source]
 endfunction"}}}
 let s:file_mru_source = {
@@ -56,22 +56,22 @@ let s:dir_mru_source = {
       \ 'max_candidates' : 200,
       \}
 
-function! s:file_mru_source.hooks.on_syntax(args, context) "{{{
+function! s:file_mru_source.hooks.on_syntax(args, context) abort "{{{
   syntax match uniteSource__FileMru_Time
         \ /([^)]*)\s\+/
         \ contained containedin=uniteSource__FileMru
   highlight default link uniteSource__FileMru_Time Statement
 endfunction"}}}
-function! s:dir_mru_source.hooks.on_syntax(args, context) "{{{
+function! s:dir_mru_source.hooks.on_syntax(args, context) abort "{{{
   syntax match uniteSource__DirectoryMru_Time
         \ /([^)]*)\s\+/
         \ contained containedin=uniteSource__DirectoryMru
   highlight default link uniteSource__DirectoryMru_Time Statement
 endfunction"}}}
-function! s:file_mru_source.hooks.on_post_filter(args, context) "{{{
+function! s:file_mru_source.hooks.on_post_filter(args, context) abort "{{{
   return s:on_post_filter(a:args, a:context)
 endfunction"}}}
-function! s:dir_mru_source.hooks.on_post_filter(args, context) "{{{
+function! s:dir_mru_source.hooks.on_post_filter(args, context) abort "{{{
   for candidate in a:context.candidates
     if !has_key(candidate, 'abbr')
       let candidate.abbr = candidate.word
@@ -82,11 +82,11 @@ function! s:dir_mru_source.hooks.on_post_filter(args, context) "{{{
   endfor
   return s:on_post_filter(a:args, a:context)
 endfunction"}}}
-function! s:file_mru_source.gather_candidates(args, context) "{{{
+function! s:file_mru_source.gather_candidates(args, context) abort "{{{
   let mru = neomru#_get_mrus().file
   return mru.gather_candidates(a:args, a:context)
 endfunction"}}}
-function! s:dir_mru_source.gather_candidates(args, context) "{{{
+function! s:dir_mru_source.gather_candidates(args, context) abort "{{{
   let mru = neomru#_get_mrus().directory
   return mru.gather_candidates(a:args, a:context)
 endfunction"}}}
@@ -98,7 +98,7 @@ let s:file_mru_source.action_table.delete = {
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,
       \ }
-function! s:file_mru_source.action_table.delete.func(candidates) "{{{
+function! s:file_mru_source.action_table.delete.func(candidates) abort "{{{
   call neomru#_get_mrus().file.delete(a:candidates)
 endfunction"}}}
 
@@ -108,13 +108,13 @@ let s:dir_mru_source.action_table.delete = {
       \ 'is_quit' : 0,
       \ 'is_selectable' : 1,
       \ }
-function! s:dir_mru_source.action_table.delete.func(candidates) "{{{
+function! s:dir_mru_source.action_table.delete.func(candidates) abort "{{{
   call neomru#_get_mrus().directory.delete(a:candidates)
 endfunction"}}}
 "}}}
 
 " Filters "{{{
-function! s:converter(candidates, context) "{{{
+function! s:converter(candidates, context) abort "{{{
   if g:neomru#filename_format == '' && g:neomru#time_format == ''
     return a:candidates
   endif
@@ -137,18 +137,18 @@ function! s:converter(candidates, context) "{{{
 
   return a:candidates
 endfunction"}}}
-function! s:file_mru_source.source__converter(candidates, context) "{{{
+function! s:file_mru_source.source__converter(candidates, context) abort "{{{
   return s:converter(a:candidates, a:context)
 endfunction"}}}
 let s:file_mru_source.converters = [ s:file_mru_source.source__converter ]
-function! s:dir_mru_source.source__converter(candidates, context) "{{{
+function! s:dir_mru_source.source__converter(candidates, context) abort "{{{
   return s:converter(a:candidates, a:context)
 endfunction"}}}
 let s:dir_mru_source.converters = [ s:dir_mru_source.source__converter ]
 "}}}
 
 " Misc "{{{
-function! s:on_post_filter(args, context) "{{{
+function! s:on_post_filter(args, context) abort "{{{
   for candidate in a:context.candidates
     let candidate.action__directory =
           \ unite#util#path2directory(candidate.action__path)

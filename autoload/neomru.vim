@@ -27,7 +27,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! neomru#set_default(var, val, ...)  "{{{
+function! neomru#set_default(var, val, ...) abort  "{{{
   if !exists(a:var) || type({a:var}) != type(a:val)
     let alternate_var = get(a:000, 0, '')
 
@@ -35,7 +35,7 @@ function! neomru#set_default(var, val, ...)  "{{{
           \ {alternate_var} : a:val
   endif
 endfunction"}}}
-function! s:substitute_path_separator(path) "{{{
+function! s:substitute_path_separator(path) abort "{{{
   return s:is_windows ? substitute(a:path, '\\', '/', 'g') : a:path
 endfunction"}}}
 
@@ -122,14 +122,14 @@ let s:mru = {
       \ 'version'         : s:VERSION,
       \ }
 
-function! s:mru.is_a(type) "{{{
+function! s:mru.is_a(type) abort "{{{
   return self.type == a:type
 endfunction "}}}
-function! s:mru.validate()
+function! s:mru.validate() abort
     throw 'unite(mru) umimplemented method: validate()!'
 endfunction
 
-function! s:mru.gather_candidates(args, context) "{{{
+function! s:mru.gather_candidates(args, context) abort "{{{
   if !self.is_loaded
     call self.load()
   endif
@@ -145,7 +145,7 @@ function! s:mru.gather_candidates(args, context) "{{{
         \ 'action__path' : v:val,
         \}")
 endfunction"}}}
-function! s:mru.delete(candidates) "{{{
+function! s:mru.delete(candidates) abort "{{{
   for candidate in a:candidates
     call filter(self.candidates,
           \ 'v:val !=# candidate.action__path')
@@ -153,11 +153,11 @@ function! s:mru.delete(candidates) "{{{
 
   call self.save()
 endfunction"}}}
-function! s:mru.has_external_update() "{{{
+function! s:mru.has_external_update() abort "{{{
   return self.mtime < getftime(self.mru_file)
 endfunction"}}}
 
-function! s:mru.save(...) "{{{
+function! s:mru.save(...) abort "{{{
   if s:is_sudo()
     return
   endif
@@ -187,7 +187,7 @@ function! s:mru.save(...) "{{{
   let self.mtime = getftime(self.mru_file)
 endfunction"}}}
 
-function! s:mru.load(...)  "{{{
+function! s:mru.load(...) abort  "{{{
   let is_force = get(a:000, 0, 0)
 
   " everything is loaded, done!
@@ -224,14 +224,14 @@ function! s:mru.load(...)  "{{{
   let self.mtime = getftime(mru_file)
   let self.is_loaded = 1
 endfunction"}}}
-function! s:mru.reload()  "{{{
+function! s:mru.reload() abort  "{{{
   call self.load(1)
 
   call filter(self.candidates,
         \ ((self.type == 'file') ?
         \ "s:is_file_exist(v:val)" : "s:is_directory_exist(v:val)"))
 endfunction"}}}
-function! s:mru.append(path)  "{{{
+function! s:mru.append(path) abort  "{{{
   call self.load()
   let index = index(self.candidates, a:path)
   if index == 0
@@ -251,7 +251,7 @@ function! s:mru.append(path)  "{{{
     call self.save()
   endif
 endfunction"}}}
-function! s:mru.version_check(ver)  "{{{
+function! s:mru.version_check(ver) abort  "{{{
   if str2float(a:ver) < self.version
     call s:print_error('Sorry, the version of MRU file is too old.')
     return 0
@@ -260,7 +260,7 @@ function! s:mru.version_check(ver)  "{{{
   endif
 endfunction"}}}
 
-function! s:resolve(fpath)  "{{{
+function! s:resolve(fpath) abort  "{{{
   return g:neomru#follow_links ? resolve(a:fpath) : a:fpath
 endfunction"}}}
 
@@ -274,7 +274,7 @@ let s:file_mru = extend(deepcopy(s:mru), {
       \ 'limit'         : g:neomru#file_mru_limit,
       \ }
       \)
-function! s:file_mru.validate()  "{{{
+function! s:file_mru.validate() abort  "{{{
   if self.do_validate
     call filter(self.candidates, 's:is_file_exist(v:val)')
   endif
@@ -288,7 +288,7 @@ let s:directory_mru = extend(deepcopy(s:mru), {
       \ }
       \)
 
-function! s:directory_mru.validate()  "{{{
+function! s:directory_mru.validate() abort  "{{{
   if self.do_validate
     call filter(self.candidates, 'getftype(v:val) ==# "dir"')
   endif
@@ -299,9 +299,9 @@ endfunction"}}}
 
 let s:MRUs.file = s:file_mru
 let s:MRUs.directory = s:directory_mru
-function! neomru#init()  "{{{
+function! neomru#init() abort  "{{{
 endfunction"}}}
-function! neomru#_import_file(path) "{{{
+function! neomru#_import_file(path) abort "{{{
   let path = a:path
   if path == ''
     let path = s:substitute_path_separator(
@@ -317,7 +317,7 @@ function! neomru#_import_file(path) "{{{
   let s:file_mru.candidates = s:uniq(candidates)
   call s:file_mru.save()
 endfunction"}}}
-function! neomru#_import_directory(path) "{{{
+function! neomru#_import_directory(path) abort "{{{
   let path = a:path
   if path == ''
     let path = s:substitute_path_separator(
@@ -328,10 +328,10 @@ function! neomru#_import_directory(path) "{{{
         \ s:directory_mru.candidates + s:import(path))
   call s:directory_mru.save()
 endfunction"}}}
-function! neomru#_get_mrus()  "{{{
+function! neomru#_get_mrus() abort  "{{{
   return s:MRUs
 endfunction"}}}
-function! neomru#_append() "{{{
+function! neomru#_append() abort "{{{
   if &l:buftype =~ 'help\|nofile' || &l:previewwindow
     return
   endif
@@ -367,12 +367,12 @@ function! neomru#_append() "{{{
     call s:directory_mru.append(path)
   endif
 endfunction"}}}
-function! neomru#_reload() "{{{
+function! neomru#_reload() abort "{{{
   for m in values(s:MRUs)
     call m.reload()
   endfor
 endfunction"}}}
-function! neomru#_save(...) "{{{
+function! neomru#_save(...) abort "{{{
   let opts = a:0 >= 1 && type(a:1) == type({}) ? a:1 : {}
 
   for m in values(s:MRUs)
@@ -383,7 +383,7 @@ endfunction"}}}
 "}}}
 
 " Misc "{{{
-function! s:writefile(path, list) "{{{
+function! s:writefile(path, list) abort "{{{
   let path = fnamemodify(a:path, ':p')
   if !isdirectory(fnamemodify(path, ':h'))
     call mkdir(fnamemodify(path, ':h'), 'p')
@@ -391,10 +391,10 @@ function! s:writefile(path, list) "{{{
 
   call writefile(a:list, path)
 endfunction"}}}
-function! s:uniq(list, ...) "{{{
+function! s:uniq(list, ...) abort "{{{
   return s:uniq_by(a:list, 'tolower(v:val)')
 endfunction"}}}
-function! s:uniq_by(list, f) "{{{
+function! s:uniq_by(list, f) abort "{{{
   let list = map(copy(a:list), printf('[v:val, %s]', a:f))
   let i = 0
   let seen = {}
@@ -409,17 +409,17 @@ function! s:uniq_by(list, f) "{{{
   endwhile
   return map(list, 'v:val[0]')
 endfunction"}}}
-function! s:is_file_exist(path)  "{{{
+function! s:is_file_exist(path) abort  "{{{
   let ignore = !empty(g:neomru#file_mru_ignore_pattern)
         \ && a:path =~ g:neomru#file_mru_ignore_pattern
   return !ignore && (getftype(a:path) ==# 'file' || a:path =~ '^\h\w\+:')
 endfunction"}}}
-function! s:is_directory_exist(path)  "{{{
+function! s:is_directory_exist(path) abort  "{{{
   let ignore = !empty(g:neomru#directory_mru_ignore_pattern)
         \ && a:path =~ g:neomru#directory_mru_ignore_pattern
   return !ignore && (isdirectory(a:path) || a:path =~ '^\h\w\+:')
 endfunction"}}}
-function! s:import(path)  "{{{
+function! s:import(path) abort  "{{{
   if !filereadable(a:path)
     call s:print_error(printf('path "%s" is not found.', a:path))
     return []
@@ -441,10 +441,10 @@ function! s:import(path)  "{{{
   return map(candidates, "substitute(s:substitute_path_separator(
         \ v:val), '/$', '', '')")
 endfunction"}}}
-function! s:print_error(msg)  "{{{
+function! s:print_error(msg) abort  "{{{
   echohl Error | echomsg '[neomru] ' . a:msg | echohl None
 endfunction"}}}
-function! s:is_sudo() "{{{
+function! s:is_sudo() abort "{{{
   return $SUDO_USER != '' && $USER !=# $SUDO_USER
         \ && $HOME !=# expand('~'.$USER)
         \ && $HOME ==# expand('~'.$SUDO_USER)
