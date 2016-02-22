@@ -166,9 +166,12 @@ function! s:mru.save(...) abort "{{{
 
   if self.has_external_update() && filereadable(self.mru_file)
     " only need to get the list which contains the latest MRUs
-    let [ver; items] = readfile(self.mru_file)
-    if self.version_check(ver)
-      call extend(self.candidates, items)
+    let lines = readfile(self.mru_file)
+    if !empty(lines)
+      let [ver; items] = lines
+      if self.version_check(ver)
+        call extend(self.candidates, items)
+      endif
     endif
   endif
 
