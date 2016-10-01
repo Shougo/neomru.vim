@@ -19,6 +19,9 @@ endfunction"}}}
 function! s:substitute_path_separator(path) abort "{{{
   return s:is_windows ? substitute(a:path, '\\', '/', 'g') : a:path
 endfunction"}}}
+function! s:expand(path) abort "{{{
+  return s:substitute_path_separator(expand(a:path))
+endfunction"}}}
 
 " Variables  "{{{
 " The version of MRU file format.
@@ -26,7 +29,7 @@ let s:VERSION = '0.3.0'
 
 let s:is_windows = has('win16') || has('win32') || has('win64') || has('win95')
 
-let s:base = expand($XDG_CACHE_HOME != '' ?
+let s:base = s:expand($XDG_CACHE_HOME != '' ?
         \   $XDG_CACHE_HOME . '/neomru' : '~/.cache/neomru')
 
 call neomru#set_default(
@@ -254,7 +257,7 @@ endfunction"}}}
 "
 let s:file_mru = extend(deepcopy(s:mru), {
       \ 'type'          : 'file',
-      \ 'mru_file'      : g:neomru#file_mru_path,
+      \ 'mru_file'      : s:expand(g:neomru#file_mru_path),
       \ 'limit'         : g:neomru#file_mru_limit,
       \ }
       \)
@@ -267,7 +270,7 @@ endfunction"}}}
 " Directory MRU:   "{{{2
 let s:directory_mru = extend(deepcopy(s:mru), {
       \ 'type'          : 'directory',
-      \ 'mru_file'      : g:neomru#directory_mru_path,
+      \ 'mru_file'      : s:expand(g:neomru#directory_mru_path),
       \ 'limit'         : g:neomru#directory_mru_limit,
       \ }
       \)
@@ -288,8 +291,7 @@ endfunction"}}}
 function! neomru#_import_file(path) abort "{{{
   let path = a:path
   if path == ''
-    let path = s:substitute_path_separator(
-      \  expand('~/.unite/file_mru'))
+    let path = s:expand('~/.unite/file_mru')
   endif
 
   let candidates = s:file_mru.candidates
@@ -304,8 +306,7 @@ endfunction"}}}
 function! neomru#_import_directory(path) abort "{{{
   let path = a:path
   if path == ''
-    let path = s:substitute_path_separator(
-          \  expand('~/.unite/directory_mru'))
+    let path = s:expand('~/.unite/directory_mru')
   endif
 
   let s:directory_mru.candidates = s:uniq(
@@ -320,7 +321,7 @@ function! neomru#_append() abort "{{{
     return
   endif
 
-  let path = s:substitute_path_separator(expand('%:p'))
+  let path = s:expand('%:p')
   if path !~ '\a\+:'
     let path = s:substitute_path_separator(
           \ simplify(s:resolve(path)))
