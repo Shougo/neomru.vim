@@ -13,7 +13,7 @@ class Source(Base):
         Base.__init__(self, vim)
 
         self.name = 'file_mru'
-        self.kind = 'jump_list'
+        self.kind = 'file'
 
     def gather_candidates(self, context):
         return self.vim.eval('neomru#_get_mrus().file.'
