@@ -122,7 +122,7 @@ function! s:mru.gather_candidates(args, context) abort "{{{
     call self.reload()
   endif
 
-  return self.candidates
+  return copy(self.candidates)
 endfunction"}}}
 function! s:mru.delete(candidates) abort "{{{
   for candidate in a:candidates
