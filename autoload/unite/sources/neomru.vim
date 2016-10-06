@@ -65,11 +65,23 @@ function! s:dir_mru_source.hooks.on_post_filter(args, context) abort "{{{
 endfunction"}}}
 function! s:file_mru_source.gather_candidates(args, context) abort "{{{
   let mru = neomru#_get_mrus().file
-  return mru.gather_candidates(a:args, a:context)
+  let candidates = mru.gather_candidates(a:args, a:context)
+  return exists('*unite#helper#paths2candidates') ?
+        \ unite#helper#paths2candidates(candidates) :
+        \ map(copy(candidates), "{
+        \ 'word' : v:val,
+        \ 'action__path' : v:val,
+        \}")
 endfunction"}}}
 function! s:dir_mru_source.gather_candidates(args, context) abort "{{{
   let mru = neomru#_get_mrus().directory
-  return mru.gather_candidates(a:args, a:context)
+  let candidates = mru.gather_candidates(a:args, a:context)
+  return exists('*unite#helper#paths2candidates') ?
+        \ unite#helper#paths2candidates(candidates) :
+        \ map(copy(candidates), "{
+        \ 'word' : v:val,
+        \ 'action__path' : v:val,
+        \}")
 endfunction"}}}
 "}}}
 " Actions "{{{

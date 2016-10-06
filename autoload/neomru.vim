@@ -122,12 +122,7 @@ function! s:mru.gather_candidates(args, context) abort "{{{
     call self.reload()
   endif
 
-  return exists('*unite#helper#paths2candidates') ?
-        \ unite#helper#paths2candidates(self.candidates) :
-        \ map(copy(self.candidates), "{
-        \ 'word' : v:val,
-        \ 'action__path' : v:val,
-        \}")
+  return self.candidates
 endfunction"}}}
 function! s:mru.delete(candidates) abort "{{{
   for candidate in a:candidates
