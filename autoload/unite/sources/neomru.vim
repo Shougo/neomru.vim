@@ -41,6 +41,12 @@ function! s:file_mru_source.hooks.on_syntax(args, context) abort "{{{
   syntax match uniteSource__FileMru_Time
         \ /([^)]*)\s\+/
         \ contained containedin=uniteSource__FileMru
+  syntax match uniteSource__FileMru_Directory
+        \ /^.*\//
+  syntax match uniteSource__FileMru_Filename
+        \ /\/\@<=.*$/ 
+  highlight link uniteSource__FileMru_Directory Delimiter
+  highlight link uniteSource__FileMru_Filename Normal
   highlight default link uniteSource__FileMru_Time Statement
 endfunction"}}}
 function! s:dir_mru_source.hooks.on_syntax(args, context) abort "{{{
