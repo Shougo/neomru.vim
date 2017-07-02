@@ -14,6 +14,7 @@ class Source(Base):
 
         self.name = 'directory_mru'
         self.kind = 'directory'
+        self.default_action = 'cd'
 
     def gather_candidates(self, context):
         return [{'word': x, 'action__path': x} for x
