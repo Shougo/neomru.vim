@@ -107,13 +107,6 @@ endfunction"}}}
 "}}}
 
 " Filters "{{{
-function! neomru#_abbr(path) abort "{{{
-  let abbr = (g:neomru#time_format == '') ? '' :
-          \ strftime(g:neomru#time_format,
-          \ getftime(candidate.action__path))
-  let abbr .= path
-  return abbr
-endfunction"}}}
 function! s:converter(candidates, context) abort "{{{
   if g:neomru#filename_format == '' && g:neomru#time_format == ''
     return a:candidates
