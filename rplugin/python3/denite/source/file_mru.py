@@ -5,6 +5,7 @@
 # ============================================================================
 
 from .base import Base
+from os.path import relpath
 
 
 class Source(Base):
@@ -18,7 +19,8 @@ class Source(Base):
     def gather_candidates(self, context):
         return [{
             'word': x,
-            'abbr': self.vim.call('neomru#_abbr', x),
+            'abbr': self.vim.call('neomru#_abbr',
+                                  relpath(x, start=context['path'])),
             'action__path': x
         } for x in self.vim.eval(
             'neomru#_get_mrus().file.'
