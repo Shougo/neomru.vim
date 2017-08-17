@@ -5,7 +5,7 @@
 # ============================================================================
 
 from .base import Base
-from os.path import relpath
+from denite.util import relpath
 
 
 class Source(Base):
@@ -15,12 +15,12 @@ class Source(Base):
 
         self.name = 'file_mru'
         self.kind = 'file'
+        self.sorters = []
 
     def gather_candidates(self, context):
         return [{
             'word': x,
-            'abbr': self.vim.call('neomru#_abbr',
-                                  relpath(x, start=context['path'])),
+            'abbr': self.vim.call('neomru#_abbr', relpath(self.vim, x)),
             'action__path': x
         } for x in self.vim.eval(
             'neomru#_get_mrus().file.'
