@@ -13,6 +13,7 @@ Interface		|neomru-interface|
   Variables		  |neomru-variables|
   Sources		  |neomru-sources|
   Commands		  |neomru-commands|
+  Functions		  |neomru-functions|
 FAQ			|neomru-faq|
 
 ==============================================================================
@@ -189,6 +190,15 @@ COMMANDS 					*neomru-commands*
 		Import the directories from previous version of MRU {path}
 		file.
 		If {path} is omitted, "~/.unite/directory_mru" is used.
+
+------------------------------------------------------------------------------
+FUNCTIONS					*neomru-functions*
+
+						*neomru#append()*
+neomru#append({filename})
+		Include the specified file in the MRU list, mimicking a file
+		open by unite/denite. This will mainly be used in
+		|unite#custom#action()|/|denite#custom#action()|.
 
 ==============================================================================
 FAQ						*neomru-faq*
