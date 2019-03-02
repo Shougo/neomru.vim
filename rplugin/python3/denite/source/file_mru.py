@@ -31,6 +31,4 @@ class Source(Base):
             'abbr': self.vim.call('neomru#_abbr',
                 path_format(x), time_format(x)),
             'action__path': x
-        } for x in self.vim.eval(
-            'neomru#_get_mrus().file.'
-            + 'gather_candidates([], {"is_redraw": 0})')]
+        } for x in self.vim.call('neomru#_gather_file_candidates')]

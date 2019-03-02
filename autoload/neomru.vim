@@ -316,7 +316,13 @@ function! neomru#_append() abort
     return
   endif
   call neomru#append(s:expand('%:p'))
-endfun
+endfunction
+function! neomru#_gather_file_candidates() abort
+  return neomru#_get_mrus().file.gather_candidates([], {'is_redraw': 0})
+endfunction
+function! neomru#_gather_directory_candidates() abort
+  return neomru#_get_mrus().directory.gather_candidates([], {'is_redraw': 0})
+endfunction
 
 function! neomru#append(filename) abort
   let path = s:fnamemodify(a:filename, ':p')
