@@ -407,7 +407,9 @@ endfunction
 function! s:is_file_exist(path) abort
   let ignore = !empty(g:neomru#file_mru_ignore_pattern)
         \ && a:path =~ g:neomru#file_mru_ignore_pattern
-  return !ignore && (getftype(a:path) ==# 'file' || a:path =~ '^\h\w\+:')
+  return !ignore && (getftype(a:path) ==# 'file' ||
+			  \ getftype(a:path) ==# 'link' ||
+			  \ a:path =~ '^\h\w\+:')
 endfunction
 function! s:is_directory_exist(path) abort
   let ignore = !empty(g:neomru#directory_mru_ignore_pattern)
