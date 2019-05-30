@@ -234,7 +234,7 @@ function! s:mru.append(path) abort
   endif
 endfunction
 function! s:mru.version_check(ver) abort
-  if str2float(a:ver) < str2float(self.version)
+  if str2float(string(a:ver)) < str2float(string(self.version))
     call s:print_error('Sorry, the version of MRU file is too old.')
     return 0
   else
