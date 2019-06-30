@@ -20,15 +20,24 @@ class Source(Base):
         }
 
     def gather_candidates(self, context):
+        candidates = self.vim.call('neomru#_gather_file_candidates')
+
         def time_format(x):
             return self.vim.call('getftime', x)
 
         def path_format(x):
             return self.vim.call('fnamemodify', x, self.vars['fnamemodify'])
 
-        return [{
-            'word': path_format(x),
-            'abbr': self.vim.call('neomru#_abbr',
-                path_format(x), time_format(x)),
-            'action__path': x
-        } for x in self.vim.call('neomru#_gather_file_candidates')]
+        if self.vim.vars['neomru#time_format'] == '':
+            return [{
+                'word': path_format(x),
+                'abbr': path_format(x),
+                'action__path': x
+            } for x in candidates]
+        else:
+            return [{
+                'word': path_format(x),
+                'abbr': self.vim.call('neomru#_abbr',
+                    path_format(x), time_format(x)),
+                'action__path': x
+            } for x in candidates]
