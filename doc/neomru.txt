@@ -53,38 +53,18 @@ g:neomru#time_format
 		Specify the output format of the modified file
 		in MRU sources. Uses |strftime()| formatting.
 		Note: It is not access time format.
-					*g:unite_source_file_mru_time_format*
-		Note: It is deprecated name.
-
-		The default value is "".
-
 						*g:neomru#filename_format*
 g:neomru#filename_format
 		Specify the output format of the filename of in MRU sources.
 		The format is same to |fnamemodify()|.  If this variable is
 		empty, drawing speed is faster.
-				*g:unite_source_file_mru_filename_format*
-		Note: It is deprecated name.
-
-		The default value is "".
-
 g:neomru#do_validate				*g:neomru#do_validate*
 		Specify whether automatically remove invalid file paths from
 		mru history.
-						*g:unite_source_mru_do_validate*
-		Note: It is deprecated name.
-
-		The default value is 1
-
 						*g:neomru#update_interval*
 g:neomru#update_interval
 		Specify the update interval to save updated mru
 		files/directories to disk.
-					*g:unite_source_mru_update_interval*
-		Note: It is deprecated name.
-
-		The default value is 600 (10 minutes)
-
 g:neomru#file_mru_path				*g:neomru#file_mru_path*
 		Specifies the file to write the information of most recent
 		used files.
@@ -95,11 +75,6 @@ g:neomru#file_mru_path				*g:neomru#file_mru_path*
 g:neomru#file_mru_limit				*g:neomru#file_mru_limit*
 		The number of recent file candidates to show in default
 		file_mru window.
-						*g:unite_source_file_mru_limit*
-		Note: It is deprecated name.
-
-		The default value is 1000.
-
 					*g:neomru#file_mru_ignore_pattern*
 g:neomru#file_mru_ignore_pattern
 		The ignore regex pattern of neomru/file source.
@@ -108,9 +83,6 @@ g:neomru#file_mru_ignore_pattern
 		Note: This variable is deprecated.  Please use
 		|unite#custom#source()| instead.
 		Note: This variable must be set before using |unite|.
-				*g:unite_source_file_mru_ignore_pattern*
-		Note: It is deprecated name.
-
 						*g:neomru#directory_mru_path*
 g:neomru#directory_mru_path
 
@@ -119,21 +91,12 @@ g:neomru#directory_mru_path
 
 						*g:neomru#directory_mru_limit*
 g:neomru#directory_mru_limit
-					*g:unite_source_directory_mru_limit*
-		Note: It is deprecated name.
-
-		The default value is 1000.
-
 					*g:neomru#directory_mru_ignore_pattern*
 g:neomru#directory_mru_ignore_pattern
 		The ignore regexp pattern of neomru/directory source.
 		Refer autoload/neomru.vim about the default
 		value.
 
-				*g:unite_source_directory_mru_ignore_pattern*
-		Note: It is deprecated name.
-
-		The targets are directory mru.
 							*g:neomru#follow_links*
 g:neomru#follow_links
 		A boolean which determines whether symbolic or hard-linked
